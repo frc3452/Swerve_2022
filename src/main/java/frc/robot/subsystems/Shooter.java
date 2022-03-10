@@ -4,39 +4,34 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
   private CANSparkMax shooterLeft;
   private CANSparkMax shooterRight;
-
-  private TalonSRX upperIndex;
   /** Creates a new Shooter. */
-  public Shooter(int shooterLeft, int shooterRight, int upperIndex) {
+  public Shooter(int shooterLeft, int shooterRight) {
     this.shooterLeft = new CANSparkMax(shooterLeft, MotorType.kBrushless);
     this.shooterLeft.setInverted(true);
-    this.shooterRight = new CANSparkMax(shooterRight, MotorType.kBrushless);
+    this.shooterLeft.setIdleMode(IdleMode.kCoast);
 
-    this.upperIndex = new TalonSRX(upperIndex);
+    this.shooterRight = new CANSparkMax(shooterRight, MotorType.kBrushless);
+    this.shooterRight.setIdleMode(IdleMode.kCoast);
+
   }
 
   public void shooter(double leftDecrease, double rightDecrease) {
-    this.shooterLeft.set((1-leftDecrease));
-    this.shooterRight.set((1-rightDecrease));
-
-    this.upperIndex.set(ControlMode.PercentOutput, 1);
+    this.shooterLeft.set(Preferences.getDouble("Xspeed", 0));
+    this.shooterRight.set(Preferences.getDouble("Yspeed", 0));
   }
 
   public void stop() {
     this.shooterLeft.set(0);
     this.shooterRight.set(0);
-
-    this.upperIndex.set(ControlMode.PercentOutput, 0);
   }
-
-  
 }

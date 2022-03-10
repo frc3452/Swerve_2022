@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.RobotState;
+// import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveDrive;
 
@@ -19,11 +19,11 @@ public class ZeroAzimuthCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    //if (RobotState.isTest()) {
+    // if (RobotState.isTest()) {
       System.out.println("Zeroing azmiuth");
       swerve.zeroAzimuth();
     // } else {
-    //   System.out.println("Can't zero azimuth, not in test");
+      // System.out.println("Can't zero azimuth, not in test");
     // }
   }
 

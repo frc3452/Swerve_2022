@@ -5,32 +5,33 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.UpperIndex;
 
-public class ShooterCommand extends CommandBase {
-  // private final XboxController joystick;
-  private final Shooter shooter;
+public class UpperIndexCommand extends CommandBase {
+  private final UpperIndex index;
 
-  public ShooterCommand(Shooter shooter) {
-
-    this.shooter = shooter;
-    addRequirements(shooter);
+  public UpperIndexCommand(UpperIndex index) {
+    this.index = index;
+    addRequirements(index);
   }
 
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
 
+  // Called every time the scheduler runs while the command is scheduled.
  public void execute() {
-  shooter.shooter(0, 0);
- }
 
+  index.index();
+ }
 
   @Override
   public void end(boolean interrupted) {
-    shooter.stop();
+    index.stop();
   }
 
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

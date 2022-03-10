@@ -8,8 +8,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 
@@ -37,30 +35,20 @@ public class SwerveDrive implements Subsystem {
 
     @Override
     public void periodic() {
-        angle = this.gyro.getAngle() - offset;
+        angle = (this.gyro.getAngle() - offset)%360;
     }
+
 
     public void drive(double pitch, double roll, double yaw) {
         double x1 = pitch;
         double y1 = roll;
         double x2 = yaw;
+
        if (isFieldOriented) {
-        // System.out.println(x1);
         Translation2d translate = new Translation2d(x1,y1);
         Translation2d newCoords = translate.rotateBy(new Rotation2d(angle));
-        System.out.println(newCoords.getX());
         x1 = newCoords.getX();
         y1 = newCoords.getY();
-
-        // System.out.println(x1);
-        // System.out.println(newCoords);
-
-            /*ystem.out.println("Apply the gyro");
-            double angle = gyro.getAngle();
-            angle = angle % 360.0;
-            final double temp = x1 * Math.cos(angle) + y1 * Math.sin(angle);
-            y1 = y1 * Math.cos(angle) - x1 * Math.sin(angle);
-            x1 = temp;*/
         }
 
         double r = Math.sqrt((L * L) + (W * W));
@@ -80,10 +68,10 @@ public class SwerveDrive implements Subsystem {
         double frontLeftAngle = Math.atan2(b, d) / Math.PI * 180;
         double frontRightAngle = Math.atan2(b, c) / Math.PI * 180;
 
-        backRight.drive(backRightSpeed, backRightAngle, "backRight");
-        backLeft.drive(backLeftSpeed, backLeftAngle, "backLeft");
-        frontRight.drive(frontRightSpeed, frontRightAngle, "frontRight");
-        frontLeft.drive(frontLeftSpeed, frontLeftAngle, "frontLeft");
+        frontLeft.drive(frontLeftSpeed, frontLeftAngle, "1");
+        frontRight.drive(frontRightSpeed, frontRightAngle, "2");
+        backLeft.drive(backLeftSpeed, backLeftAngle, "3");
+        backRight.drive(backRightSpeed, backRightAngle, "4");
     }
 
     /*public void zeroGyro() {
@@ -93,16 +81,19 @@ public class SwerveDrive implements Subsystem {
     }*/
 
     public void zeroAzimuth() {
-        backRight.zeroAzimuth("backRight");
-        backLeft.zeroAzimuth("backLeft");
-        frontRight.zeroAzimuth("frontRight");
-        frontLeft.zeroAzimuth("frontLeft");
+        frontLeft.zeroAzimuth("1");
+        frontRight.zeroAzimuth("2");
+        backLeft.zeroAzimuth("3");
+        backRight.zeroAzimuth("4");
     }
 
-    /*public void getPreference() {
-        backRight.getPreference("backRight");
-        backLeft.getPreference("backLeft");
-        frontRight.getPreference("frontRight");
-        frontLeft.getPreference("frontLeft");
-    }*/
+    public void autonomous(double distance) {
+        double r = 0;
+        double rotations = (Math.PI*r*r)/distance/360;
+
+        frontLeft.autonomous(rotations);
+        frontRight.autonomous(rotations);
+        backLeft.autonomous(rotations);
+        backRight.autonomous(rotations);
+    }
 }

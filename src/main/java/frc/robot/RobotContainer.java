@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -12,7 +11,6 @@ import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -34,6 +32,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Shooter shooter;
   private final SwerveDrive swerve;
+  private final UpperIndex index;
 
 
 
@@ -48,9 +47,9 @@ public class RobotContainer {
 
     climber = new Climber(C_Climber.LEFT_CLIMBER,C_Climber.RIGHT_CLIMBER);
     intake = new Intake(C_Intake.INTAKE, C_Index.LOWER_INDEX);
-    shooter = new Shooter(C_Shooter.LEFT_SHOOTER, C_Shooter.RIGHT_SHOOTER, C_Index.UPPER_INDEX);
+    shooter = new Shooter(C_Shooter.LEFT_SHOOTER, C_Shooter.RIGHT_SHOOTER);
     swerve = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
-
+    index = new UpperIndex(C_Index.UPPER_INDEX);
 
     climber.setDefaultCommand(new ClimberCommand(climber, joystickControl));
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, joystickDrive));
@@ -59,7 +58,10 @@ public class RobotContainer {
     .whileHeld(new IntakeCommand(intake));
 
     new JoystickButton(joystickControl, Button.kB.value)
-      .whileHeld(new ShooterCommand(shooter, joystickControl));
+      .whileHeld(new ShooterCommand(shooter));
+
+    new JoystickButton(joystickControl, Button.kY.value)
+      .whileHeld(new UpperIndexCommand(index));
   
     new JoystickButton(joystick, Button.kB.value)
       .whileActiveOnce(new ZeroAzimuthCommand(swerve));

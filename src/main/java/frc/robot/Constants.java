@@ -20,6 +20,7 @@ public final class Constants {
     public static final double ROBOT_LENGTH = 30;
     public static final double ROBOT_WIDTH = 30;
     public static final double DEFAULT_DEADBAND = 0.2;
+    public static final double WHEEL_RADIUS = 0;
 
     public final class C_SwerveModules {
 
