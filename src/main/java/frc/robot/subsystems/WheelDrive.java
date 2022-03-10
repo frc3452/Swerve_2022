@@ -44,8 +44,11 @@ public class WheelDrive {
             Position = Position + optimization(Position, newPosition);
             // }
         }
-
+        if (name=="1") {
+            System.out.println(this.azimuth.getSelectedSensorPosition());
+        }
         speedMotor.set(speed);
+        // azimuth.set(ControlMode.Position,newPosition*(4096/360));
         azimuth.set(ControlMode.Position, Position * (4096 / 360));
     }
 

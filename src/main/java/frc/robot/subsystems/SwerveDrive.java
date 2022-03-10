@@ -28,7 +28,7 @@ public class SwerveDrive implements Subsystem {
 
     public final static double L = Constants.ROBOT_LENGTH;
     public final static double W = Constants.ROBOT_WIDTH;
-    public final static boolean isFieldOriented = false;
+    public final static boolean isFieldOriented = true;
     
     double angle = 0;
     double offset = /*Preferences.getDouble("offset", 0)*/0;
