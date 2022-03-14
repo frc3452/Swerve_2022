@@ -39,14 +39,14 @@ public class WheelDrive {
 
     public void drive(double speed, double newPosition, String name) {
         if (speed != 0) {
-            // Position = Position + optimization(Position, newPosition);
-            // System.out.println(optimization(Position, newPosition));
+            Position = Position + optimization(Position, newPosition);
+            System.out.println(optimization(Position, newPosition));
             if (name == "1") {
                 // System.out.println(speed);
             }
-            this.azimuth.set(ControlMode.Position, newPosition*(4096/360));
+            this.azimuth.set(ControlMode.Position, Position *(4096/360));
         }
-        speedMotor.set(speed);
+        // speedMotor.set(speed);
     }
 
     private double optimization(double a, double b) {

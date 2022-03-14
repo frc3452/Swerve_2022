@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 
@@ -28,20 +29,21 @@ public class SwerveDrive implements Subsystem {
 
     public final static double L = Constants.ROBOT_LENGTH;
     public final static double W = Constants.ROBOT_WIDTH;
-    public final static boolean isFieldOriented = false;
+    public final static boolean isFieldOriented = true;
 
     double angle = 0;
-    double offset = /* Preferences.getDouble("offset", 0) */0;
+    double offset = Preferences.getDouble("offset", 0);
 
     @Override
     public void periodic() {
         angle = (this.gyro.getAngle() - offset) % 360;
     }
 
-    public void drive(double x1, double y1, double x2) {
-        // double x1 = pitch;
-        // double y1 = roll;
-        // double x2 = yaw;
+    public void drive(double pitch, double roll, double yaw) {
+        double x1 = pitch;
+        double y1 = roll;
+        double x2 = yaw;
+        
 
         if (isFieldOriented) {
             Translation2d translate = new Translation2d(x1, y1);
