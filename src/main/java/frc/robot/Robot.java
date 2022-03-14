@@ -10,6 +10,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.C_SwerveModules;
+import frc.robot.commands.ZeroAzimuthCommand;
+// import frc.robot.commands.Autonomous.autonomouscommand;
+import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.WheelDrive;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -22,12 +27,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
 
-  double counter = 0.0;
   int loop_counter = 0;
   int prints = 0;
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private SwerveDrive swerveDrive;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -39,8 +44,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
-    CameraServer.startAutomaticCapture();
+    m_robotContainer = new RobotContainer(); 
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.startAutomaticCapture(1);
   }
 
   /**
@@ -87,7 +93,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -96,14 +101,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    // swerveDrive.auto(.5);
   }
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -118,7 +120,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    SmartDashboard.putNumber("Counter", counter++);
+    // SmartDashboard.putNumber("Counter", counter++);
     //System.out.println(Preferences.getDouble(this.getClass().getName(), 0));
   }
 }

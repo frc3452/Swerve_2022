@@ -42,8 +42,8 @@ public final class Constants {
     }
 
     public final class C_Climber {
-        public static final int LEFT_CLIMBER = 32;
-        public static final int RIGHT_CLIMBER = 31;
+        public static final int LEFT_CLIMBER = 31;
+        public static final int RIGHT_CLIMBER = 32;
     }
 
     public final class C_Intake {

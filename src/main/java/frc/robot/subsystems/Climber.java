@@ -14,7 +14,9 @@ public class Climber implements Subsystem{
 
   public Climber(int leftClimber, int rightClimber) {
     this.climberLeft = new CANSparkMax(leftClimber, MotorType.kBrushless);
+    this.climberLeft.setInverted(false);
     this.climberRight = new CANSparkMax(rightClimber, MotorType.kBrushless);
+    this.climberRight.setInverted(true);
   }
 
   public void climber(double leftSpeed, double rightSpeed) {

@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
+import frc.robot.commands.Autonomous.DriveDistance;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /**
@@ -25,15 +27,12 @@ public class RobotContainer {
 
   private final static XboxController joystickDrive = new XboxController(0);
   private final static XboxController joystickControl = new XboxController(1);
-  private final static XboxController joystick = new XboxController(2);
-
 
   private final Climber climber;
   private final Intake intake;
   private final Shooter shooter;
-  private final SwerveDrive swerve;
+  public final SwerveDrive swerve;
   private final UpperIndex index;
-
 
 
   /**
@@ -51,6 +50,8 @@ public class RobotContainer {
     swerve = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
     index = new UpperIndex(C_Index.UPPER_INDEX);
 
+    SmartDashboard.putData("ZeroAzimuth", new ZeroAzimuthCommand(swerve));
+
     climber.setDefaultCommand(new ClimberCommand(climber, joystickControl));
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, joystickDrive));
 
@@ -63,8 +64,8 @@ public class RobotContainer {
     new JoystickButton(joystickControl, Button.kY.value)
       .whileHeld(new UpperIndexCommand(index));
   
-    new JoystickButton(joystick, Button.kB.value)
-      .whileActiveOnce(new ZeroAzimuthCommand(swerve));
+    // new JoystickButton(joystick, Button.kB.value)
+    //   .whileActiveOnce(new ZeroAzimuthCommand(swerve));
   }
 
   public static double deadband(double value) {
@@ -89,7 +90,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return null;
+    return new DriveDistance(swerve);
   }
 }

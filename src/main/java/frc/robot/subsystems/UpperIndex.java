@@ -13,6 +13,7 @@ public class UpperIndex extends SubsystemBase {
   /** Creates a new Shooter. */
   public UpperIndex(int upperIndex) {
     this.upperIndex = new TalonSRX(upperIndex);
+    this.upperIndex.setInverted(true);
   }
 
   public void index()

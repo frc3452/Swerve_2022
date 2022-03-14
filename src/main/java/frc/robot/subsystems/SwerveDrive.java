@@ -28,27 +28,26 @@ public class SwerveDrive implements Subsystem {
 
     public final static double L = Constants.ROBOT_LENGTH;
     public final static double W = Constants.ROBOT_WIDTH;
-    public final static boolean isFieldOriented = true;
-    
+    public final static boolean isFieldOriented = false;
+
     double angle = 0;
-    double offset = /*Preferences.getDouble("offset", 0)*/0;
+    double offset = /* Preferences.getDouble("offset", 0) */0;
 
     @Override
     public void periodic() {
-        angle = (this.gyro.getAngle() - offset)%360;
+        angle = (this.gyro.getAngle() - offset) % 360;
     }
 
+    public void drive(double x1, double y1, double x2) {
+        // double x1 = pitch;
+        // double y1 = roll;
+        // double x2 = yaw;
 
-    public void drive(double pitch, double roll, double yaw) {
-        double x1 = pitch;
-        double y1 = roll;
-        double x2 = yaw;
-
-       if (isFieldOriented) {
-        Translation2d translate = new Translation2d(x1,y1);
-        Translation2d newCoords = translate.rotateBy(new Rotation2d(angle));
-        x1 = newCoords.getX();
-        y1 = newCoords.getY();
+        if (isFieldOriented) {
+            Translation2d translate = new Translation2d(x1, y1);
+            Translation2d newCoords = translate.rotateBy(new Rotation2d(angle));
+            x1 = newCoords.getX();
+            y1 = newCoords.getY();
         }
 
         double r = Math.sqrt((L * L) + (W * W));
@@ -74,11 +73,13 @@ public class SwerveDrive implements Subsystem {
         backRight.drive(backRightSpeed, backRightAngle, "4");
     }
 
-    /*public void zeroGyro() {
-        gyro.setAngleAdjustment(0);
-        double adj = gyro.getAngle() % 360;
-        gyro.setAngleAdjustment(-adj);
-    }*/
+    /*
+     * public void zeroGyro() {
+     * gyro.setAngleAdjustment(0);
+     * double adj = gyro.getAngle() % 360;
+     * gyro.setAngleAdjustment(-adj);
+     * }
+     */
 
     public void zeroAzimuth() {
         frontLeft.zeroAzimuth("1");
@@ -87,13 +88,13 @@ public class SwerveDrive implements Subsystem {
         backRight.zeroAzimuth("4");
     }
 
-    public void autonomous(double distance) {
-        double r = 0;
-        double rotations = (Math.PI*r*r)/distance/360;
+    public void auto(double speed) {
+        // double r = 0;
+        // double rotations = (Math.PI * r * r) / distance / 360;
 
-        frontLeft.autonomous(rotations);
-        frontRight.autonomous(rotations);
-        backLeft.autonomous(rotations);
-        backRight.autonomous(rotations);
+        frontLeft.drive(speed,0,"1");
+        frontRight.drive(speed,0,"2");
+        backLeft.drive(speed,0,"3");
+        backRight.drive(speed,0,"4");
     }
 }

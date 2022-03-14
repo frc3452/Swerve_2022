@@ -12,11 +12,15 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.commands.ZeroAzimuthCommand;
+
 /** Add your docs here. */
 public class WheelDrive {
     private TalonSRX azimuth;
     private CANSparkMax speedMotor;
     double Position = 0;
+    boolean i = true;
+    int c=0;
 
     public WheelDrive(int azimuth, int speedMotor) {
         this.azimuth = new TalonSRX(azimuth);
@@ -30,53 +34,50 @@ public class WheelDrive {
         this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
         this.speedMotor.setInverted(false);
         this.speedMotor.setIdleMode(IdleMode.kBrake);
-        this.speedMotor.setSmartCurrentLimit(1);
         this.speedMotor.setSmartCurrentLimit(40);
     }
 
     public void drive(double speed, double newPosition, String name) {
-
-        if (speed == 0) {
-            // Position = optimization(Position, 0);
-            // this.speedMotor.setInverted(false);
-        } else {
-            // if (Math.abs((Position % 360) - (newPosition % 360)) > 60){
-            Position = Position + optimization(Position, newPosition);
-            // }
-        }
-        if (name=="1") {
-            System.out.println(this.azimuth.getSelectedSensorPosition());
+        if (speed != 0) {
+            // Position = Position + optimization(Position, newPosition);
+            // System.out.println(optimization(Position, newPosition));
+            if (name == "1") {
+                // System.out.println(speed);
+            }
+            this.azimuth.set(ControlMode.Position, newPosition*(4096/360));
         }
         speedMotor.set(speed);
-        // azimuth.set(ControlMode.Position,newPosition*(4096/360));
-        azimuth.set(ControlMode.Position, Position * (4096 / 360));
     }
 
     private double optimization(double a, double b) {
-        double dir = ((b % 360 + 360) % 360) - ((a % 360 + 360) % 360);
-
+        double dir = Math.IEEEremainder(b, 360) - Math.IEEEremainder(a, 360);
+System.out.println(!this.speedMotor.getInverted());
         if (Math.abs(dir) > 180) {
             dir = -(Math.signum(dir) * 360) + dir;
         }
 
         if (Math.abs(dir) > 90) {
-            dir = -(180 - dir);
+            dir = Math.signum(dir) * (180 - Math.abs(dir));
+            // if () {
+                this.speedMotor.setInverted(!this.speedMotor.getInverted());
+                // c += 1;
+
+            // }
+            // if (c%2 == 0) {
+            //     this.speedMotor.setInverted(!this.speedMotor.getInverted());
+
+            
+
+        //     System.out.println(this.speedMotor.getInverted());
+        } else {
+            c= 1;
         }
 
-        if (Math.abs(b) > 90) {
-            this.speedMotor.setInverted(true);
-        } else {
-            this.speedMotor.setInverted(false);
-        }
-        return (dir % 360);
+        return dir;
     }
 
     public void zeroAzimuth(String name) {
         this.azimuth.setSelectedSensorPosition(0);
         System.out.println(name);
-    }
-
-    public void autonomous(double rotations){
-        this.speedMotor.getEncoder(SparkMaxRelativeEncoder.Type.kQuadrature,1);
     }
 }
