@@ -21,17 +21,18 @@ public class DriveDistance extends CommandBase {
 
     @Override
     public void execute() {
-        swerve.drive(.06, 0, 0);
+        // swerve.drive(.06, 0, 0);
+        // swerve.auto(1000);
     }
 
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override
     public void end(boolean interrupted) {
-        swerve.drive(0, 0, 0);
+        // swerve.drive(0, 0, 0);
     }
 }

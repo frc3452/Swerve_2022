@@ -18,6 +18,7 @@ public class SwerveDrive implements Subsystem {
     private WheelDrive frontRight;
     private WheelDrive frontLeft;
     private AHRS gyro;
+    
 
     public SwerveDrive(WheelDrive backRight, WheelDrive backLeft, WheelDrive frontRight, WheelDrive frontLeft) {
         this.backLeft = backLeft;
@@ -43,11 +44,11 @@ public class SwerveDrive implements Subsystem {
         double x1 = pitch;
         double y1 = roll;
         double x2 = yaw;
-        
+
 
         if (isFieldOriented) {
             Translation2d translate = new Translation2d(x1, y1);
-            Translation2d newCoords = translate.rotateBy(new Rotation2d(angle));
+            Translation2d newCoords = translate.rotateBy(new Rotation2d(Math.toRadians(angle)));
             x1 = newCoords.getX();
             y1 = newCoords.getY();
         }
@@ -90,13 +91,10 @@ public class SwerveDrive implements Subsystem {
         backRight.zeroAzimuth("4");
     }
 
-    public void auto(double speed) {
-        // double r = 0;
-        // double rotations = (Math.PI * r * r) / distance / 360;
-
-        frontLeft.drive(speed,0,"1");
-        frontRight.drive(speed,0,"2");
-        backLeft.drive(speed,0,"3");
-        backRight.drive(speed,0,"4");
-    }
+    // public void auto(double Distance) {
+    //     frontLeft.auto(Distance);
+    //     frontRight.auto(Distance);
+    //     backLeft.auto(Distance);
+    //     backRight.auto(Distance);
+    // }
 }
