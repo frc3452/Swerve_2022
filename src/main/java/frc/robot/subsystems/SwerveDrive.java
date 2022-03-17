@@ -9,6 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 
@@ -30,7 +31,7 @@ public class SwerveDrive implements Subsystem {
 
     public final static double L = Constants.ROBOT_LENGTH;
     public final static double W = Constants.ROBOT_WIDTH;
-    public final static boolean isFieldOriented = true;
+    public static boolean isFieldOriented = true;
 
     double angle = 0;
     double offset = Preferences.getDouble("offset", 0);
@@ -38,6 +39,7 @@ public class SwerveDrive implements Subsystem {
     @Override
     public void periodic() {
         angle = (this.gyro.getAngle() - offset) % 360;
+        // frontRight.printAngle();
     }
 
     public void drive(double pitch, double roll, double yaw) {
@@ -52,6 +54,8 @@ public class SwerveDrive implements Subsystem {
             x1 = newCoords.getX();
             y1 = newCoords.getY();
         }
+
+        System.out.println(String.format("X: %.2f, Y: %.2f", x1, y1));
 
         double r = Math.sqrt((L * L) + (W * W));
 

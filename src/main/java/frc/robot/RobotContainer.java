@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.commands.Autonomous.DriveDistance;
@@ -63,6 +64,11 @@ public class RobotContainer {
 
     new JoystickButton(joystickControl, Button.kY.value)
       .whileHeld(new UpperIndexCommand(index));
+
+      new JoystickButton(joystickDrive, Button.kStart.value)
+      .whenPressed(new InstantCommand(() -> {
+          SwerveDrive.isFieldOriented = !SwerveDrive.isFieldOriented;
+      }));
   
     // new JoystickButton(joystick, Button.kB.value)
     //   .whileActiveOnce(new ZeroAzimuthCommand(swerve));

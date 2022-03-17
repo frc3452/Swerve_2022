@@ -13,6 +13,8 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -35,7 +37,7 @@ public class WheelDrive {
         this.azimuth.setNeutralMode(NeutralMode.Coast);
 
         this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
-        this.speedMotor.restoreFactoryDefaults();        
+        this.speedMotor.restoreFactoryDefaults();
         this.speedMotor.setInverted(false);
         this.speedMotor.setSmartCurrentLimit(40);
         this.speedMotor.setIdleMode(IdleMode.kBrake);
@@ -48,31 +50,29 @@ public class WheelDrive {
     }
 
     public void drive(double speed, double newPosition, String name) {
+        var optimized = optimization(new SwerveModuleState(speed, Rotation2d.fromDegrees(newPosition)));
         if (speed != 0) {
-            // Position = Position + optimization(Position, newPosition);
-            // System.out.println(optimization(Position, newPosition));
+            this.azimuth.set(ControlMode.Position, optimized.angle.getDegrees() * (4096.0 / 360.0));
             if (name == "1") {
-                // System.out.println(speed);
+                System.out.println(optimized);
             }
-            // this.azimuth.set(ControlMode.Position, Position *(4096/360));
-            this.azimuth.set(ControlMode.Position, newPosition *(4096.0/360.0));
         }
-        speedMotor.set(speed);
+        speedMotor.set(optimized.speedMetersPerSecond);
     }
 
-    private double optimization(double a, double b) {
-        double dir = Math.IEEEremainder(b, 360) - Math.IEEEremainder(a, 360);
-System.out.println(!this.speedMotor.getInverted());
-        if (Math.abs(dir) > 180) {
-            dir = -(Math.signum(dir) * 360) + dir;
-        }
+    void printAngle() {
+        System.out.println(wheelState());
+    }
 
-        if (Math.abs(dir) > 90) {
-            dir = Math.signum(dir) * (180 - Math.abs(dir));
-                this.speedMotor.setInverted(!this.speedMotor.getInverted());
-        }
+    public Rotation2d wheelState() {
+        return Rotation2d.fromDegrees(this.azimuth.getSelectedSensorPosition() / (4096.0 / 360.0));
+    }
 
-        return dir;
+    private SwerveModuleState optimization(SwerveModuleState desiredState) {
+        var current = wheelState();
+        desiredState.angle = Rotation2d
+                .fromDegrees(desiredState.angle.getDegrees() + current.getDegrees() - current.getDegrees() % 360.0);
+        return SwerveModuleState.optimize(desiredState, current);
     }
 
     public void zeroAzimuth(String name) {
@@ -84,7 +84,7 @@ System.out.println(!this.speedMotor.getInverted());
         double dist_1_rev = Constants.WHEEL_DIAMETER * Math.PI;
         return dist_1_rev;
     }
-    
+
     public void auto(double distance) {
         // double circumference = Constants.WHEEL_DIAMETER * Math.PI;
         // double rotations = distance/circumference;
@@ -94,9 +94,10 @@ System.out.println(!this.speedMotor.getInverted());
         // System.out.println("Encoder position start ");
         // System.out.println(this.encoder.getPosition());
         // this.encoder.setPositionConversionFactor(4096);
-        // this.pidController.setReference(rotations, CANSparkMax.ControlType.kPosition);
+        // this.pidController.setReference(rotations,
+        // CANSparkMax.ControlType.kPosition);
         // System.out.println("Encoder position end ");
         // System.out.println(this.encoder.getPosition());
-        
+
     }
 }
