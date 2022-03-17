@@ -17,7 +17,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 
-/** Add your docs here. */
+/**
+ * Add your docs here.
+ */
 public class WheelDrive {
     private TalonSRX azimuth;
     private CANSparkMax speedMotor;
@@ -60,8 +62,29 @@ public class WheelDrive {
         speedMotor.set(optimized.speedMetersPerSecond);
     }
 
-    void printAngle() {
-        System.out.println(wheelState());
+    public double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
+        double lowerBound;
+        double upperBound;
+        double lowerOffset = scopeReference % 360;
+        if (lowerOffset >= 0) {
+            lowerBound = scopeReference - lowerOffset;
+            upperBound = scopeReference + (360 - lowerOffset);
+        } else {
+            upperBound = scopeReference - lowerOffset;
+            lowerBound = scopeReference - (360 + lowerOffset);
+        }
+        while (newAngle < lowerBound) {
+            newAngle += 360;
+        }
+        while (newAngle > upperBound) {
+            newAngle -= 360;
+        }
+        if (newAngle - scopeReference > 180) {
+            newAngle -= 360;
+        } else if (newAngle - scopeReference < -180) {
+            newAngle += 360;
+        }
+        return newAngle;
     }
 
     public Rotation2d wheelState() {
@@ -70,8 +93,9 @@ public class WheelDrive {
 
     private SwerveModuleState optimization(SwerveModuleState desiredState) {
         var current = wheelState();
-        desiredState.angle = Rotation2d
-                .fromDegrees(desiredState.angle.getDegrees() + current.getDegrees() - current.getDegrees() % 360.0);
+        desiredState.angle = Rotation2d.fromDegrees(
+                placeInAppropriate0To360Scope(current.getDegrees(),
+                        desiredState.angle.getDegrees()));
         return SwerveModuleState.optimize(desiredState, current);
     }
 
