@@ -1,4 +1,4 @@
-package frc.robot.commands.Autonomous;
+package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
@@ -22,7 +22,7 @@ public class DriveDistance extends CommandBase {
     @Override
     public void execute() {
         // swerve.drive(.06, 0, 0);
-        // swerve.auto(1000);
+        swerve.auto(10);
     }
 
 

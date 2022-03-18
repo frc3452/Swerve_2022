@@ -34,12 +34,16 @@ public class SwerveDrive implements Subsystem {
     public static boolean isFieldOriented = true;
 
     double angle = 0;
-    double offset = Preferences.getDouble("offset", 0);
-
+    double offset = 0.0;
+  
     @Override
     public void periodic() {
         angle = (this.gyro.getAngle() - offset) % 360;
         // frontRight.printAngle();
+    }
+
+    public void zero() {
+        offset = this.gyro.getAngle();
     }
 
     public void drive(double pitch, double roll, double yaw) {
@@ -55,7 +59,7 @@ public class SwerveDrive implements Subsystem {
             y1 = newCoords.getY();
         }
 
-        System.out.println(String.format("X: %.2f, Y: %.2f", x1, y1));
+        // System.out.println(String.format("X: %.2f, Y: %.2f", x1, y1));
 
         double r = Math.sqrt((L * L) + (W * W));
 
@@ -74,10 +78,10 @@ public class SwerveDrive implements Subsystem {
         double frontLeftAngle = Math.atan2(b, d) / Math.PI * 180;
         double frontRightAngle = Math.atan2(b, c) / Math.PI * 180;
 
-        frontLeft.drive(frontLeftSpeed, frontLeftAngle, "1");
-        frontRight.drive(frontRightSpeed, frontRightAngle, "2");
-        backLeft.drive(backLeftSpeed, backLeftAngle, "3");
-        backRight.drive(backRightSpeed, backRightAngle, "4");
+        frontLeft.drive(frontLeftSpeed, frontLeftAngle);
+        frontRight.drive(frontRightSpeed, frontRightAngle);
+        backLeft.drive(backLeftSpeed, backLeftAngle);
+        backRight.drive(backRightSpeed, backRightAngle);
     }
 
     /*
@@ -89,16 +93,16 @@ public class SwerveDrive implements Subsystem {
      */
 
     public void zeroAzimuth() {
-        frontLeft.zeroAzimuth("1");
-        frontRight.zeroAzimuth("2");
-        backLeft.zeroAzimuth("3");
-        backRight.zeroAzimuth("4");
+        frontLeft.zeroAzimuth();
+        frontRight.zeroAzimuth();
+        backLeft.zeroAzimuth();
+        backRight.zeroAzimuth();
     }
 
-    // public void auto(double Distance) {
-    //     frontLeft.auto(Distance);
-    //     frontRight.auto(Distance);
-    //     backLeft.auto(Distance);
-    //     backRight.auto(Distance);
-    // }
+    public void auto(double Distance) {
+        // frontLeft.auto(Distance);
+        // frontRight.auto(Distance);
+        // backLeft.auto(Distance);
+        backRight.auto(Distance);
+    }
 }

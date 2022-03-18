@@ -6,12 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
-import frc.robot.commands.Autonomous.DriveDistance;
+import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /**
@@ -51,6 +52,7 @@ public class RobotContainer {
     swerve = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
     index = new UpperIndex(C_Index.UPPER_INDEX);
 
+    // SmartDashboard.
     SmartDashboard.putData("ZeroAzimuth", new ZeroAzimuthCommand(swerve));
 
     climber.setDefaultCommand(new ClimberCommand(climber, joystickControl));
@@ -68,7 +70,10 @@ public class RobotContainer {
       new JoystickButton(joystickDrive, Button.kStart.value)
       .whenPressed(new InstantCommand(() -> {
           SwerveDrive.isFieldOriented = !SwerveDrive.isFieldOriented;
+          // swerve.zero();
       }));
+
+      
   
     // new JoystickButton(joystick, Button.kB.value)
     //   .whileActiveOnce(new ZeroAzimuthCommand(swerve));

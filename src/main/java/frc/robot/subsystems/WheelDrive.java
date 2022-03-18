@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -15,27 +17,40 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Preferences;
 import frc.robot.Constants;
 
 /**
  * Add your docs here.
  */
 public class WheelDrive {
-    private TalonSRX azimuth;
-    private CANSparkMax speedMotor;
-    private SparkMaxPIDController pidController;
-    private RelativeEncoder encoder;
+    private final TalonSRX azimuth;
+    private final int azimuthId;
+    private final CANSparkMax speedMotor;
+    private final SparkMaxPIDController pidController;
+    private final RelativeEncoder encoder;
 
-    double Position = 0;
+    // double Position;
+
+    private double azimuthOffset;
 
     public WheelDrive(int azimuth, int speedMotor) {
+        azimuthId = azimuth;
 
         this.azimuth = new TalonSRX(azimuth);
         this.azimuth.configFactoryDefault();
         this.azimuth.config_kP(0, 3.5);
         this.azimuth.config_kD(0, 80);
         this.azimuth.setInverted(false);
-        this.azimuth.configPeakCurrentLimit(30);
+
+        // this.azimuth.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute);
+        this.azimuth.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute,0,100);
+
+        
+        this.azimuth.configContinuousCurrentLimit(30);
+        this.azimuth.configPeakCurrentLimit(15);
+        this.azimuth.configPeakCurrentDuration(50);
+
         this.azimuth.setNeutralMode(NeutralMode.Coast);
 
         this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
@@ -49,15 +64,17 @@ public class WheelDrive {
         this.pidController.setD(1);
 
         this.encoder = this.speedMotor.getEncoder();
+
+        azimuthOffset = Preferences.getDouble(String.valueOf(azimuthId), -3452);
     }
 
-    public void drive(double speed, double newPosition, String name) {
+    public void drive(double speed, double newPosition) {
+        if (azimuthId == 21) {
+            System.out.println(wheelState() + String.format("Offset: %.2f", azimuthOffset));
+        }
         var optimized = optimization(new SwerveModuleState(speed, Rotation2d.fromDegrees(newPosition)));
         if (speed != 0) {
-            this.azimuth.set(ControlMode.Position, optimized.angle.getDegrees() * (4096.0 / 360.0));
-            if (name == "1") {
-                System.out.println(optimized);
-            }
+            this.azimuth.set(ControlMode.Position, optimized.angle.getDegrees() * (4096.0 / 360.0) + azimuthOffset);
         }
         speedMotor.set(optimized.speedMetersPerSecond);
     }
@@ -88,7 +105,8 @@ public class WheelDrive {
     }
 
     public Rotation2d wheelState() {
-        return Rotation2d.fromDegrees(this.azimuth.getSelectedSensorPosition() / (4096.0 / 360.0));
+        double tick = this.azimuth.getSelectedSensorPosition() - azimuthOffset;
+        return Rotation2d.fromDegrees(tick / (4096.0 / 360.0));
     }
 
     private SwerveModuleState optimization(SwerveModuleState desiredState) {
@@ -99,9 +117,10 @@ public class WheelDrive {
         return SwerveModuleState.optimize(desiredState, current);
     }
 
-    public void zeroAzimuth(String name) {
-        this.azimuth.setSelectedSensorPosition(0);
-        System.out.println(name);
+    public void zeroAzimuth() {
+        azimuthOffset = this.azimuth.getSelectedSensorPosition() % 4096;
+        if (azimuthOffset < 0) azimuthOffset += 4096;
+        Preferences.setDouble(String.valueOf(azimuthId), azimuthOffset);
     }
 
     public double returnDistance() {
@@ -110,18 +129,17 @@ public class WheelDrive {
     }
 
     public void auto(double distance) {
-        // double circumference = Constants.WHEEL_DIAMETER * Math.PI;
-        // double rotations = distance/circumference;
-        // System.out.println("Rotations desired: ");
-        // System.out.println(rotations);
-        // this.encoder.setPosition(0);
-        // System.out.println("Encoder position start ");
-        // System.out.println(this.encoder.getPosition());
-        // this.encoder.setPositionConversionFactor(4096);
-        // this.pidController.setReference(rotations,
-        // CANSparkMax.ControlType.kPosition);
-        // System.out.println("Encoder position end ");
-        // System.out.println(this.encoder.getPosition());
-
+        double circumference = Constants.WHEEL_DIAMETER * Math.PI;
+        double rotations = distance/circumference;
+        System.out.println("Rotations desired: ");
+        System.out.println(rotations);
+        this.encoder.setPosition(0);
+        System.out.println("Encoder position start ");
+        System.out.println(this.encoder.getPosition());
+        // this.encoder.setPositionConversionFactor(42);
+        this.pidController.setReference(rotations,
+        CANSparkMax.ControlType.kPosition);
+        System.out.println("Encoder position end ");
+        System.out.println(this.encoder.getPosition());
     }
 }
