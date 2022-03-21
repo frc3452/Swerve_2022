@@ -22,7 +22,7 @@ public class ShooterCommand extends CommandBase {
   }
 
  public void execute() {
-  shooter.shooter(0, 0);
+  shooter.shoot();
  }
 
 

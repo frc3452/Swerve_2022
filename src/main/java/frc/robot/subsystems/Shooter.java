@@ -21,14 +21,15 @@ public class Shooter extends SubsystemBase {
     // this.shooterLeft.set(30);
 
     this.shooterRight = new CANSparkMax(shooterRight, MotorType.kBrushless);
+    this.shooterRight.setInverted(true);
     this.shooterRight.setIdleMode(IdleMode.kCoast);
     // this.shooterRight.set(16);
 
   }
 
-  public void shooter(double leftDecrease, double rightDecrease) {
-    this.shooterLeft.set(Preferences.getDouble("frontSpeed", .3));
-    this.shooterRight.set(Preferences.getDouble("backSpeed", .6));
+  public void shoot() {
+    this.shooterLeft.set(Preferences.getDouble("frontSpeed", .6));
+    this.shooterRight.set(Preferences.getDouble("backSpeed", .4));
   }
 
   public void stop() {

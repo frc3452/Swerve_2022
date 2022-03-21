@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.commands.autonomous.DriveDistance;
+import frc.robot.commands.autonomous.ExampleAuto;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 /**
@@ -27,8 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final static XboxController joystickDrive = new XboxController(0);
-  private final static XboxController joystickControl = new XboxController(1);
+  private final XboxController joystickDrive = new XboxController(0);
+  private final XboxController joystickControl = new XboxController(1);
 
   private final Climber climber;
   private final Intake intake;
@@ -101,6 +102,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new DriveDistance(swerve);
+    // return new DriveDistance(swerve);
+    return new ExampleAuto(swerve);
   }
 }

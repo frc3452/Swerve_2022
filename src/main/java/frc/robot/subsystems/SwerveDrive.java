@@ -46,12 +46,8 @@ public class SwerveDrive implements Subsystem {
         offset = this.gyro.getAngle();
     }
 
-    public void drive(double pitch, double roll, double yaw) {
-        double x1 = pitch;
-        double y1 = roll;
-        double x2 = yaw;
-
-
+    public void drive(double x1, double y1, double theta) {
+        
         if (isFieldOriented) {
             Translation2d translate = new Translation2d(x1, y1);
             Translation2d newCoords = translate.rotateBy(new Rotation2d(Math.toRadians(angle)));
@@ -63,10 +59,10 @@ public class SwerveDrive implements Subsystem {
 
         double r = Math.sqrt((L * L) + (W * W));
 
-        double a = x1 - x2 * (L / r);
-        double b = x1 + x2 * (L / r);
-        double c = y1 - x2 * (W / r);
-        double d = y1 + x2 * (W / r);
+        double a = x1 - theta * (L / r);
+        double b = x1 + theta * (L / r);
+        double c = y1 - theta * (W / r);
+        double d = y1 + theta * (W / r);
 
         double backRightSpeed = Math.sqrt((a * a) + (d * d));
         double backLeftSpeed = Math.sqrt((a * a) + (c * c));
