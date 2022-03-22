@@ -9,6 +9,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
@@ -19,7 +20,6 @@ public class SwerveDrive implements Subsystem {
     private WheelDrive frontRight;
     private WheelDrive frontLeft;
     private AHRS gyro;
-    
 
     public SwerveDrive(WheelDrive backRight, WheelDrive backLeft, WheelDrive frontRight, WheelDrive frontLeft) {
         this.backLeft = backLeft;
@@ -27,6 +27,13 @@ public class SwerveDrive implements Subsystem {
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
         this.gyro = new AHRS();
+
+        var tab = Shuffleboard.getTab("SmartDashboard");
+
+        tab.addString("BL", () -> backLeft.wheelState().toString());
+        tab.addString("BR", () -> backRight.wheelState().toString());
+        tab.addString("FL", () -> frontLeft.wheelState().toString());
+        tab.addString("FR", () -> frontRight.wheelState().toString());
     }
 
     public final static double L = Constants.ROBOT_LENGTH;
@@ -35,7 +42,7 @@ public class SwerveDrive implements Subsystem {
 
     double angle = 0;
     double offset = 0.0;
-  
+
     @Override
     public void periodic() {
         angle = (this.gyro.getAngle() - offset) % 360;
@@ -47,7 +54,8 @@ public class SwerveDrive implements Subsystem {
     }
 
     public void drive(double x1, double y1, double theta) {
-        
+
+        System.out.println(String.format("X: %.2f, Y: %.2f, T: %.2f", x1, y1, theta));
         if (isFieldOriented) {
             Translation2d translate = new Translation2d(x1, y1);
             Translation2d newCoords = translate.rotateBy(new Rotation2d(Math.toRadians(angle)));

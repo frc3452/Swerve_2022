@@ -15,10 +15,13 @@ public class DriveSwerveIndefintely extends CommandBase {
         this.x = x;
         this.y = y;
         this.theta = theta;
+        
+        addRequirements(swerve);
     }
 
     @Override
-    public void initialize() {
+    public void initialize() {      
+        SwerveDrive.isFieldOriented = false;
     }
 
     @Override
@@ -34,5 +37,6 @@ public class DriveSwerveIndefintely extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         swerve.drive(0, 0, 0);
+        //sysout
     }
 }

@@ -69,9 +69,9 @@ public class WheelDrive {
     }
 
     public void drive(double speed, double newPosition) {
-        if (azimuthId == 21) {
-            System.out.println(wheelState() + String.format("Offset: %.2f", azimuthOffset));
-        }
+        // if (azimuthId == 21) {
+            // System.out.println(wheelState() + String.format("Offset: %.2f", azimuthOffset));
+        // }
         var optimized = optimization(new SwerveModuleState(speed, Rotation2d.fromDegrees(newPosition)));
         if (speed != 0) {
             this.azimuth.set(ControlMode.Position, optimized.angle.getDegrees() * (4096.0 / 360.0) + azimuthOffset);
