@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -28,6 +29,10 @@ public class RobotContainer {
   private final Shooter shooter;
   public final SwerveDrive swerve;
   private final UpperIndex index;
+
+  private final SendableChooser<Command> chooser = new SendableChooser<Command>();
+  
+  private ExampleAuto defaultAuto;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -65,6 +70,17 @@ public class RobotContainer {
           // swerve.zero();
         }));
 
+    defaultAuto = new ExampleAuto(swerve, index, shooter);
+
+    chooser.setDefaultOption("Default Auto", defaultAuto);
+ 
+    chooser.addOption("Other A", new ExampleAuto(swerve, index, shooter));
+    chooser.addOption("Other B", new ExampleAuto(swerve, index, shooter));
+    chooser.addOption("Other C", new ExampleAuto(swerve, index, shooter));
+
+    // Shuffleboard.getTab("A").add("choosy", chooser);
+    SmartDashboard.putData(chooser);
+
     // new JoystickButton(joystick, Button.kB.value)
     // .whileActiveOnce(new ZeroAzimuthCommand(swerve));
   }
@@ -91,6 +107,12 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ExampleAuto(swerve, index, shooter);
+    // return new ExampleAuto(swerve, index, shooter);
+    Command selected = chooser.getSelected();
+    if (selected == null) {
+      return defaultAuto;
+    } else {
+      return selected;
+    }
   }
 }
