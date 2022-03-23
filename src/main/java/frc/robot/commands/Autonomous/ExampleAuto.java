@@ -1,21 +1,29 @@
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.UpperIndexCommand;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveDrive;
+import frc.robot.subsystems.UpperIndex;
 
 public class ExampleAuto extends SequentialCommandGroup {
 
-    public ExampleAuto(SwerveDrive swerve) {
+    public ExampleAuto(SwerveDrive swerve, UpperIndex index, Shooter shoot) {
+        var shoot_command = new ShooterCommand(shoot, false).withTimeout(1.5)
+                .andThen(
+                        new ParallelDeadlineGroup(new WaitCommand(5.5),
+                                new ShooterCommand(shoot, true),
+                                new UpperIndexCommand(index)));
+        
+        var drive_command = new DriveTime(swerve, 0.25, 0, 0, 2.5).andThen(
+                new WaitCommand(5.5));
+
         addCommands(
-                // a,b,c
-                // a.andThen(b).andThen(c),
-                // new ShooterCommand(shooter).raceWith(new WaitCommand(5)),
-                new DriveTime(swerve, 0.25, 0, 0, 2),
-                new WaitCommand(2),
-                new DriveTime(swerve, 0, 0.25, 0, 2),
-                new WaitCommand(2),
-                new DriveTime(swerve, 0, 0, 0.25, 2));
+                shoot_command,
+                new WaitCommand(0.25),
+                drive_command);
     }
 }

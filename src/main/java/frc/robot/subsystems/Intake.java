@@ -11,18 +11,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
   private TalonSRX intake;
   private TalonSRX lowerIndex;
-  
+
   public Intake(int intake, int lowerIndex) {
     this.intake = new TalonSRX(intake);
     this.lowerIndex = new TalonSRX(lowerIndex);
   }
 
   public void intake(double intakeSpeed, double indexSpeed) {
-    this.intake.set(ControlMode.PercentOutput,intakeSpeed);
+    this.intake.set(ControlMode.PercentOutput, intakeSpeed);
     this.lowerIndex.set(ControlMode.PercentOutput, indexSpeed);
   }
+
   public void stop() {
-    this.intake.set(ControlMode.PercentOutput,0);
+    this.intake.set(ControlMode.PercentOutput, 0);
     this.lowerIndex.set(ControlMode.PercentOutput, 0);
   }
 }

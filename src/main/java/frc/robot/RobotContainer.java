@@ -16,15 +16,7 @@ import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.commands.autonomous.ExampleAuto;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
+
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
@@ -37,7 +29,6 @@ public class RobotContainer {
   public final SwerveDrive swerve;
   private final UpperIndex index;
 
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -47,7 +38,7 @@ public class RobotContainer {
     WheelDrive frontRight = new WheelDrive(C_SwerveModules.FRONT_RIGHT_AZIMUTH, C_SwerveModules.FRONT_RIGHT_SPEED);
     WheelDrive frontLeft = new WheelDrive(C_SwerveModules.FRONT_LEFT_AZIMUTH, C_SwerveModules.FRONT_LEFT_SPEED);
 
-    climber = new Climber(C_Climber.LEFT_CLIMBER,C_Climber.RIGHT_CLIMBER);
+    climber = new Climber(C_Climber.LEFT_CLIMBER, C_Climber.RIGHT_CLIMBER);
     intake = new Intake(C_Intake.INTAKE, C_Index.LOWER_INDEX);
     shooter = new Shooter(C_Shooter.LEFT_SHOOTER, C_Shooter.RIGHT_SHOOTER);
     swerve = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
@@ -60,24 +51,22 @@ public class RobotContainer {
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, joystickDrive));
 
     new JoystickButton(joystickControl, Button.kA.value)
-    .whileHeld(new IntakeCommand(intake));
+        .whileHeld(new IntakeCommand(intake));
 
     new JoystickButton(joystickControl, Button.kB.value)
-      .whileHeld(new ShooterCommand(shooter));
+        .whileHeld(new ShooterCommand(shooter, true));
 
     new JoystickButton(joystickControl, Button.kY.value)
-      .whileHeld(new UpperIndexCommand(index));
+        .whileHeld(new UpperIndexCommand(index));
 
-      new JoystickButton(joystickDrive, Button.kStart.value)
-      .whenPressed(new InstantCommand(() -> {
+    new JoystickButton(joystickDrive, Button.kStart.value)
+        .whenPressed(new InstantCommand(() -> {
           SwerveDrive.isFieldOriented = !SwerveDrive.isFieldOriented;
           // swerve.zero();
-      }));
+        }));
 
-      
-  
     // new JoystickButton(joystick, Button.kB.value)
-    //   .whileActiveOnce(new ZeroAzimuthCommand(swerve));
+    // .whileActiveOnce(new ZeroAzimuthCommand(swerve));
   }
 
   public static double deadband(double value) {
@@ -102,7 +91,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return new DriveDistance(swerve);
-    return new ExampleAuto(swerve);
+    return new ExampleAuto(swerve, index, shooter);
   }
 }

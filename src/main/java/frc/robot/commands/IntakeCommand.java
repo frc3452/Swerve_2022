@@ -21,16 +21,17 @@ public class IntakeCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
-      intake.intake(.5, .75);
+    intake.intake(.5, .75);
   }
-  @Override
-public void end(boolean interrupted) {
-  intake.stop();
-}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
   }
+
+  @Override
+  public void end(boolean interrupted) {
+    intake.stop();
+  }
+
 }

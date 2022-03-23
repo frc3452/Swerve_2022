@@ -21,10 +21,9 @@ public class UpperIndexCommand extends CommandBase {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
- public void execute() {
-
-  index.index();
- }
+  public void execute() {
+    index.index();
+  }
 
   @Override
   public void end(boolean interrupted) {

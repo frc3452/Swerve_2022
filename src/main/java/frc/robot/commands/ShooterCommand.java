@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 public class ShooterCommand extends CommandBase {
-  // private final XboxController joystick;
+
   private final Shooter shooter;
+  private final boolean stop;
 
-  public ShooterCommand(Shooter shooter) {
-
+  public ShooterCommand(Shooter shooter, boolean stop) {
     this.shooter = shooter;
+    this.stop = stop;
     addRequirements(shooter);
   }
 
@@ -21,14 +22,15 @@ public class ShooterCommand extends CommandBase {
   public void initialize() {
   }
 
- public void execute() {
-  shooter.shoot();
- }
-
+  public void execute() {
+    shooter.shoot();
+  }
 
   @Override
   public void end(boolean interrupted) {
-    shooter.stop();
+    if (stop) {
+      shooter.stop();
+    } 
   }
 
   @Override
