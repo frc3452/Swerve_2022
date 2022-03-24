@@ -60,4 +60,8 @@ public final class Constants {
         public static final int LEFT_SHOOTER = 44;
         public static final int RIGHT_SHOOTER = 45;
     }
+
+    public final class C_Actuator {
+        public static final int ACTUATOR = 46;
+    }
 }

@@ -29,6 +29,7 @@ public class RobotContainer {
   private final Shooter shooter;
   public final SwerveDrive swerve;
   private final UpperIndex index;
+  private final IntakeActuation actuator;
 
   private final SendableChooser<Command> chooser = new SendableChooser<Command>();
   
@@ -48,6 +49,7 @@ public class RobotContainer {
     shooter = new Shooter(C_Shooter.LEFT_SHOOTER, C_Shooter.RIGHT_SHOOTER);
     swerve = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
     index = new UpperIndex(C_Index.UPPER_INDEX);
+    actuator = new IntakeActuation(C_Actuator.ACTUATOR);
 
     // SmartDashboard.
     SmartDashboard.putData("ZeroAzimuth", new ZeroAzimuthCommand(swerve));
@@ -57,6 +59,9 @@ public class RobotContainer {
 
     new JoystickButton(joystickControl, Button.kA.value)
         .whileHeld(new IntakeCommand(intake));
+  
+    new JoystickButton(joystickControl, Button.kRightBumper.value)
+        .whileHeld(new IntakeActuationCommand(actuator));
 
     new JoystickButton(joystickControl, Button.kB.value)
         .whileHeld(new ShooterCommand(shooter, true));

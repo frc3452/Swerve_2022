@@ -55,7 +55,7 @@ public class SwerveDrive implements Subsystem {
 
     public void drive(double x1, double y1, double theta) {
 
-        System.out.println(String.format("X: %.2f, Y: %.2f, T: %.2f", x1, y1, theta));
+        // System.out.println(String.format("X: %.2f, Y: %.2f, T: %.2f", x1, y1, theta));
         if (isFieldOriented) {
             Translation2d translate = new Translation2d(x1, y1);
             Translation2d newCoords = translate.rotateBy(new Rotation2d(Math.toRadians(angle)));

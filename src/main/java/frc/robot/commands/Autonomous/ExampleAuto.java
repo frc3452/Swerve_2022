@@ -14,7 +14,7 @@ public class ExampleAuto extends SequentialCommandGroup {
     public ExampleAuto(SwerveDrive swerve, UpperIndex index, Shooter shoot) {
         var shoot_command = new ShooterCommand(shoot, false).withTimeout(1.5)
                 .andThen(
-                        new ParallelDeadlineGroup(new WaitCommand(5.5),
+                        new ParallelDeadlineGroup(new WaitCommand(2),
                                 new ShooterCommand(shoot, true),
                                 new UpperIndexCommand(index)));
         
