@@ -28,8 +28,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot() {
-    this.shooterLeft.set(Preferences.getDouble("frontSpeed", .6));
-    this.shooterRight.set(Preferences.getDouble("backSpeed", .4));
+    this.shooterLeft.set(Preferences.getDouble("frontSpeed", -.85));
+    this.shooterRight.set(Preferences.getDouble("backSpeed", -.85));
   }
 
   public void stop() {

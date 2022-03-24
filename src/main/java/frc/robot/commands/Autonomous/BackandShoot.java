@@ -18,7 +18,7 @@ public class BackandShoot extends SequentialCommandGroup {
                                 new ShooterCommand(shoot, true),
                                 new UpperIndexCommand(index)));
 
-        var drive_command = new DriveTime(swerve, 0.25, 0, 0, 2.5);
+        var drive_command = new DriveTime(swerve, -0.25, 0, 0, 2.5);
 
         addCommands(
                 drive_command,

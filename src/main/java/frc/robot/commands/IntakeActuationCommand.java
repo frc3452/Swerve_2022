@@ -19,7 +19,7 @@ public class IntakeActuationCommand extends CommandBase {
 
     public void execute() {
         if(!direction) {
-            intakeActuation.actuate(.5);
+            intakeActuation.actuate(.75);
         }else {
             intakeActuation.actuate(-0.65);
         }
