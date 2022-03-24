@@ -4,14 +4,18 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class IntakeCommand extends CommandBase {
   private final Intake intake;
+  private boolean direction;
 
-  public IntakeCommand(Intake intake) {
+  public IntakeCommand(Intake intake, boolean direction) {
     this.intake = intake;
+    this.direction = direction;
     addRequirements(intake);
   }
 
@@ -21,7 +25,12 @@ public class IntakeCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
-    intake.intake(.5, .75);
+    if(!direction){
+      intake.intake(.5, .75);
+    }else{
+      intake.intake(-0.5, -0.75);
+    }
+  
   }
 
   @Override

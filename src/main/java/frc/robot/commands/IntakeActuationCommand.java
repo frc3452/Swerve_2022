@@ -6,9 +6,11 @@ import frc.robot.subsystems.IntakeActuation;
 public class IntakeActuationCommand extends CommandBase {
 
     private final IntakeActuation intakeActuation;
+    private boolean direction;
 
-    public IntakeActuationCommand(IntakeActuation intakeActuation) {
+    public IntakeActuationCommand(IntakeActuation intakeActuation, boolean direction) {
         this.intakeActuation = intakeActuation;
+        this.direction = direction;
         addRequirements(intakeActuation);
     }
 
@@ -16,7 +18,12 @@ public class IntakeActuationCommand extends CommandBase {
     public void initialize() {}
 
     public void execute() {
-        intakeActuation.actuate(.001);
+        if(!direction) {
+            intakeActuation.actuate(.5);
+        }else {
+            intakeActuation.actuate(-0.65);
+        }
+        
     }
 
     @Override

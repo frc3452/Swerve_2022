@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
+import frc.robot.commands.autonomous.BackandShoot;
+import frc.robot.commands.autonomous.Backup;
 import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.commands.autonomous.ExampleAuto;
 import frc.robot.subsystems.*;
@@ -58,10 +60,16 @@ public class RobotContainer {
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, joystickDrive));
 
     new JoystickButton(joystickControl, Button.kA.value)
-        .whileHeld(new IntakeCommand(intake));
+        .whileHeld(new IntakeCommand(intake, false));
+    
+    new JoystickButton(joystickDrive, Button.kA.value)
+        .whileHeld(new IntakeCommand(intake, true));
   
     new JoystickButton(joystickControl, Button.kRightBumper.value)
-        .whileHeld(new IntakeActuationCommand(actuator));
+        .whileHeld(new IntakeActuationCommand(actuator, false));
+
+    new JoystickButton(joystickControl, Button.kLeftBumper.value)
+        .whileHeld(new IntakeActuationCommand(actuator, true));
 
     new JoystickButton(joystickControl, Button.kB.value)
         .whileHeld(new ShooterCommand(shooter, true));
@@ -79,11 +87,11 @@ public class RobotContainer {
 
     chooser.setDefaultOption("Default Auto", defaultAuto);
  
-    chooser.addOption("Other A", new ExampleAuto(swerve, index, shooter));
-    chooser.addOption("Other B", new ExampleAuto(swerve, index, shooter));
-    chooser.addOption("Other C", new ExampleAuto(swerve, index, shooter));
+    chooser.addOption("BackandShoot", new BackandShoot(swerve, index, shooter));
+    chooser.addOption("Back Up", new Backup(swerve));
+    chooser.addOption("ShootandBackUp", new ExampleAuto(swerve, index, shooter));
 
-    // Shuffleboard.getTab("A").add("choosy", chooser);
+    // Shuffleboard.getTab("A").add("choos", chooser);
     SmartDashboard.putData(chooser);
 
     // new JoystickButton(joystick, Button.kB.value)
