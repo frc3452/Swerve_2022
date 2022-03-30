@@ -45,6 +45,7 @@ public class DriveTime extends SequentialCommandGroup {
         @Override
         public void end(boolean interrupted) {
             swerve.drive(0, 0, 0);
+            SwerveDrive.isFieldOriented = true;
             // sysout
         }
     }

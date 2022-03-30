@@ -9,9 +9,11 @@ import frc.robot.subsystems.UpperIndex;
 
 public class UpperIndexCommand extends CommandBase {
   private final UpperIndex index;
+  private boolean direction;
 
-  public UpperIndexCommand(UpperIndex index) {
+  public UpperIndexCommand(UpperIndex index, boolean direction) {
     this.index = index;
+    this.direction = direction;
     addRequirements(index);
   }
 
@@ -22,7 +24,12 @@ public class UpperIndexCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
-    index.index();
+    if(!direction){
+      index.index(-.75);
+    }else{
+      index.index(0.75);
+    }
+
   }
 
   @Override

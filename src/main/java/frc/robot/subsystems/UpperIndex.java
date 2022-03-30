@@ -16,9 +16,9 @@ public class UpperIndex extends SubsystemBase {
     this.upperIndex.setInverted(true);
   }
 
-  public void index()
+  public void index(double indexSpeed)
    {
-    this.upperIndex.set(ControlMode.PercentOutput, 1);
+    this.upperIndex.set(ControlMode.PercentOutput, indexSpeed);
   }
 
   public void stop() {

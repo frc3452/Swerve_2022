@@ -35,7 +35,8 @@ public class RobotContainer {
 
   private final SendableChooser<Command> chooser = new SendableChooser<Command>();
   
-  private ExampleAuto defaultAuto;
+  //private ExampleAuto defaultAuto;
+  private BackandShoot defaultAuto;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -75,7 +76,10 @@ public class RobotContainer {
         .whileHeld(new ShooterCommand(shooter, true));
 
     new JoystickButton(joystickControl, Button.kY.value)
-        .whileHeld(new UpperIndexCommand(index));
+        .whileHeld(new UpperIndexCommand(index, true));
+
+    new JoystickButton(joystickDrive, Button.kY.value)
+        .whileHeld(new UpperIndexCommand(index, false));
 
     new JoystickButton(joystickDrive, Button.kStart.value)
         .whenPressed(new InstantCommand(() -> {
@@ -83,7 +87,8 @@ public class RobotContainer {
           // swerve.zero();
         }));
 
-    defaultAuto = new ExampleAuto(swerve, index, shooter);
+    // defaultAuto = new ExampleAuto(swerve, index, shooter);
+    defaultAuto = new BackandShoot(swerve, index, shooter);
 
     chooser.setDefaultOption("Default Auto", defaultAuto);
  

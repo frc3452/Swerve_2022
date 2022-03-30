@@ -16,7 +16,7 @@ public class ExampleAuto extends SequentialCommandGroup {
                 .andThen(
                         new ParallelDeadlineGroup(new WaitCommand(2),
                                 new ShooterCommand(shoot, true),
-                                new UpperIndexCommand(index)));
+                                new UpperIndexCommand(index, true)));
         
         var drive_command = new DriveTime(swerve, -0.25, 0, 0, 2.5).andThen(
                 new WaitCommand(5.5));
