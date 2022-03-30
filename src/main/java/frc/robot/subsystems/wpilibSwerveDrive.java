@@ -13,21 +13,21 @@ public class wpilibSwerveDrive extends SubsystemBase {
   /** Creates a new wpilibSwerveDrive. */
   public wpilibSwerveDrive() {
 
-    // private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-    //   // Front left
-    //   new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
-    //   // Front right
-    //   new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
-    //   // Front left
-    //   new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
-    //   // Front right
-    //   new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2)
-    // );
+    private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+      // Front left
+      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
+      // Front right
+      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
+      // Front left
+      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
+      // Front right
+      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2)
+    );
 
-    // private final SwerveModule m_frontLeftModule;
-    // private final SwerveModule m_frontRightModule;
-    // private final SwerveModule m_backLeftModule;
-    // private final SwerveModule m_backRightModule;
+    private final SwerveModule m_frontLeftModule;
+    private final SwerveModule m_frontRightModule;
+    private final SwerveModule m_backLeftModule;
+    private final SwerveModule m_backRightModule;
   }
 
   @Override

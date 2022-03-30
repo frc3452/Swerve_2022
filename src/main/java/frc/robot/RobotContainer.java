@@ -84,7 +84,7 @@ public class RobotContainer {
     new JoystickButton(joystickDrive, Button.kStart.value)
         .whenPressed(new InstantCommand(() -> {
           SwerveDrive.isFieldOriented = !SwerveDrive.isFieldOriented;
-          // swerve.zero();
+          swerve.zero();
         }));
 
     // defaultAuto = new ExampleAuto(swerve, index, shooter);
