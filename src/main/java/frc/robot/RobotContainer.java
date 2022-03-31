@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -15,122 +14,99 @@ import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.commands.autonomous.BackandShoot;
 import frc.robot.commands.autonomous.Backup;
-import frc.robot.commands.autonomous.DriveDistance;
 import frc.robot.commands.autonomous.ExampleAuto;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.swerve.SwerveDrive;
+import frc.robot.swerve.WheelDrive;
 
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+    // The robot's subsystems and commands are defined here...
 
-  private final XboxController joystickDrive = new XboxController(0);
-  private final XboxController joystickControl = new XboxController(1);
+    private final XboxController joystickDrive = new XboxController(0);
+    private final XboxController joystickControl = new XboxController(1);
 
-  private final Climber climber;
-  private final Intake intake;
-  private final Shooter shooter;
-  public final SwerveDrive swerve;
-  private final UpperIndex index;
-  private final IntakeActuation actuator;
+    private boolean fieldRelative = false;
 
-  private final SendableChooser<Command> chooser = new SendableChooser<Command>();
-  
-  //private ExampleAuto defaultAuto;
-  private BackandShoot defaultAuto;
+    private final Climber climber;
+    private final Intake intake;
+    private final Shooter shooter;
+    public final SwerveDrive swerve;
+    private final UpperIndex index;
+    private final IntakeActuation actuator;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
-  public RobotContainer() {
-    WheelDrive backRight = new WheelDrive(C_SwerveModules.BACK_RIGHT_AZIMUTH, C_SwerveModules.BACK_RIGHT_SPEED);
-    WheelDrive backLeft = new WheelDrive(C_SwerveModules.BACK_LEFT_AZIMUTH, C_SwerveModules.BACK_LEFT_SPEED);
-    WheelDrive frontRight = new WheelDrive(C_SwerveModules.FRONT_RIGHT_AZIMUTH, C_SwerveModules.FRONT_RIGHT_SPEED);
-    WheelDrive frontLeft = new WheelDrive(C_SwerveModules.FRONT_LEFT_AZIMUTH, C_SwerveModules.FRONT_LEFT_SPEED);
+    private final SendableChooser<Command> chooser = new SendableChooser<Command>();
 
-    climber = new Climber(C_Climber.LEFT_CLIMBER, C_Climber.RIGHT_CLIMBER);
-    intake = new Intake(C_Intake.INTAKE, C_Index.LOWER_INDEX);
-    shooter = new Shooter(C_Shooter.LEFT_SHOOTER, C_Shooter.RIGHT_SHOOTER);
-    swerve = new SwerveDrive(backRight, backLeft, frontRight, frontLeft);
-    index = new UpperIndex(C_Index.UPPER_INDEX);
-    actuator = new IntakeActuation(C_Actuator.ACTUATOR);
+    private final BackandShoot defaultAuto;
 
-    // SmartDashboard.
-    SmartDashboard.putData("ZeroAzimuth", new ZeroAzimuthCommand(swerve));
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        climber = new Climber(C_Climber.LEFT_CLIMBER, C_Climber.RIGHT_CLIMBER);
+        intake = new Intake(C_Intake.INTAKE, C_Index.LOWER_INDEX);
+        shooter = new Shooter(C_Shooter.LEFT_SHOOTER, C_Shooter.RIGHT_SHOOTER);
+        swerve = new SwerveDrive();
+        index = new UpperIndex(C_Index.UPPER_INDEX);
+        actuator = new IntakeActuation(C_Actuator.ACTUATOR);
 
-    climber.setDefaultCommand(new ClimberCommand(climber, joystickControl));
-    swerve.setDefaultCommand(new SwerveDriveCommand(swerve, joystickDrive));
+        // SmartDashboard.
+        SmartDashboard.putData("ZeroAzimuth", new ZeroAzimuthCommand(swerve));
 
-    new JoystickButton(joystickControl, Button.kA.value)
-        .whileHeld(new IntakeCommand(intake, false));
-    
-    new JoystickButton(joystickDrive, Button.kA.value)
-        .whileHeld(new IntakeCommand(intake, true));
-  
-    new JoystickButton(joystickControl, Button.kRightBumper.value)
-        .whileHeld(new IntakeActuationCommand(actuator, false));
+        climber.setDefaultCommand(new ClimberCommand(climber, joystickControl));
+        swerve.setDefaultCommand(new SwerveDriveCommand(swerve, joystickDrive, () -> fieldRelative));
 
-    new JoystickButton(joystickControl, Button.kLeftBumper.value)
-        .whileHeld(new IntakeActuationCommand(actuator, true));
+        new JoystickButton(joystickControl, Button.kA.value)
+                .whileHeld(new IntakeCommand(intake, false));
 
-    new JoystickButton(joystickControl, Button.kB.value)
-        .whileHeld(new ShooterCommand(shooter, true));
+        new JoystickButton(joystickDrive, Button.kA.value)
+                .whileHeld(new IntakeCommand(intake, true));
 
-    new JoystickButton(joystickControl, Button.kY.value)
-        .whileHeld(new UpperIndexCommand(index, true));
+        new JoystickButton(joystickControl, Button.kRightBumper.value)
+                .whileHeld(new IntakeActuationCommand(actuator, false));
 
-    new JoystickButton(joystickDrive, Button.kY.value)
-        .whileHeld(new UpperIndexCommand(index, false));
+        new JoystickButton(joystickControl, Button.kLeftBumper.value)
+                .whileHeld(new IntakeActuationCommand(actuator, true));
 
-    new JoystickButton(joystickDrive, Button.kStart.value)
-        .whenPressed(new InstantCommand(() -> {
-          SwerveDrive.isFieldOriented = !SwerveDrive.isFieldOriented;
-          swerve.zero();
-        }));
+        new JoystickButton(joystickControl, Button.kB.value)
+                .whileHeld(new ShooterCommand(shooter, true));
 
-    // defaultAuto = new ExampleAuto(swerve, index, shooter);
-    defaultAuto = new BackandShoot(swerve, index, shooter);
+        new JoystickButton(joystickControl, Button.kY.value)
+                .whileHeld(new UpperIndexCommand(index, true));
 
-    chooser.setDefaultOption("Default Auto", defaultAuto);
- 
-    chooser.addOption("BackandShoot", new BackandShoot(swerve, index, shooter));
-    chooser.addOption("Back Up", new Backup(swerve));
-    chooser.addOption("ShootandBackUp", new ExampleAuto(swerve, index, shooter));
+        new JoystickButton(joystickDrive, Button.kY.value)
+                .whileHeld(new UpperIndexCommand(index, false));
 
-    // Shuffleboard.getTab("A").add("choos", chooser);
-    SmartDashboard.putData(chooser);
+        new JoystickButton(joystickDrive, Button.kStart.value)
+                .whenPressed(new InstantCommand(() -> fieldRelative = !fieldRelative));
 
-    // new JoystickButton(joystick, Button.kB.value)
-    // .whileActiveOnce(new ZeroAzimuthCommand(swerve));
-  }
+        defaultAuto = new BackandShoot(swerve, index, shooter);
 
-  public static double deadband(double value) {
-    return deadband(value, Constants.DEFAULT_DEADBAND);
-  }
+        chooser.setDefaultOption("Default Auto", defaultAuto);
 
-  public static double deadband(double value, double deadband) {
-    if (Math.abs(value) > deadband) {
-      if (value > 0.0) {
-        return (value - deadband) / (1.0 - deadband);
-      } else {
-        return (value + deadband) / (1.0 - deadband);
-      }
-    } else {
-      return 0.0;
+        chooser.addOption("BackandShoot", new BackandShoot(swerve, index, shooter));
+        chooser.addOption("Back Up", new Backup(swerve));
+        chooser.addOption("ShootandBackUp", new ExampleAuto(swerve, index, shooter));
+
+        SmartDashboard.putData(chooser);
+
+        // new JoystickButton(joystick, Button.kB.value)
+        // .whileActiveOnce(new ZeroAzimuthCommand(swerve));
     }
-  }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // return new ExampleAuto(swerve, index, shooter);
-    Command selected = chooser.getSelected();
-    if (selected == null) {
-      return defaultAuto;
-    } else {
-      return selected;
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        // return new ExampleAuto(swerve, index, shooter);
+        Command selected = chooser.getSelected();
+        if (selected == null) {
+            return defaultAuto;
+        } else {
+            return selected;
+        }
     }
-  }
 }

@@ -1,40 +1,38 @@
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.SwerveDrive;
+import frc.robot.swerve.SwerveDrive;
 
 public class DriveTime extends SequentialCommandGroup {
 
-    public DriveTime(SwerveDrive swerve, double x, double y, double theta, double time) {
+    public DriveTime(SwerveDrive swerve, ChassisSpeeds speed, boolean fieldRelative, double time) {
         addCommands(
-                new DriveSwerveIndefintely(swerve, x, y, theta).withTimeout(time));
+                new DriveSwerveIndefintely(swerve, speed, fieldRelative).withTimeout(time));
     }
 
     private class DriveSwerveIndefintely extends CommandBase {
 
         private final SwerveDrive swerve;
+        private final ChassisSpeeds speed;
+        private final boolean fieldRelative;
 
-        private final double x, y, theta;
 
-        public DriveSwerveIndefintely(SwerveDrive swerve, double x, double y, double theta) {
+        public DriveSwerveIndefintely(SwerveDrive swerve, ChassisSpeeds speed, boolean fieldRelative) {
             this.swerve = swerve;
-            this.x = x;
-            this.y = y;
-            this.theta = theta;
-
+            this.speed = speed;
+            this.fieldRelative = fieldRelative;
             addRequirements(swerve);
         }
 
         @Override
         public void initialize() {
-            SwerveDrive.isFieldOriented = false;
         }
 
         @Override
         public void execute() {
-            swerve.drive(x, y, theta);
+            swerve.drive(speed, fieldRelative);
         }
 
         @Override
@@ -44,9 +42,7 @@ public class DriveTime extends SequentialCommandGroup {
 
         @Override
         public void end(boolean interrupted) {
-            swerve.drive(0, 0, 0);
-            SwerveDrive.isFieldOriented = true;
-            // sysout
+            swerve.stop();
         }
     }
 

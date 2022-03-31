@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.UpperIndexCommand;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.SwerveDrive;
+import frc.robot.swerve.SwerveDrive;
 import frc.robot.subsystems.UpperIndex;
 
 public class ExampleAuto extends SequentialCommandGroup {

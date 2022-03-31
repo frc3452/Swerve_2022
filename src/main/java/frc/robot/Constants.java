@@ -25,7 +25,7 @@ public final class Constants {
     public static final double WHEEL_DIAMETER = 0.245;
 
 
-    public final class C_SwerveModules {
+    public static final class C_SwerveModules {
 
         // Front Left Swerve Module
         public static final int FRONT_LEFT_AZIMUTH = 21;
@@ -44,26 +44,26 @@ public final class Constants {
         public static final int BACK_RIGHT_SPEED = 14;
     }
 
-    public final class C_Climber {
+    public static final class C_Climber {
         public static final int LEFT_CLIMBER = 31;
         public static final int RIGHT_CLIMBER = 32;
     }
 
-    public final class C_Intake {
+    public static final class C_Intake {
         public static final int INTAKE = 41;
     }
 
-    public final class C_Index {
+    public static final class C_Index {
         public static final int LOWER_INDEX = 42;
         public static final int UPPER_INDEX = 43;
     }
 
-    public final class C_Shooter {
+    public static final class C_Shooter {
         public static final int LEFT_SHOOTER = 44;
         public static final int RIGHT_SHOOTER = 45;
     }
 
-    public final class C_Actuator {
+    public static final class C_Actuator {
         public static final int ACTUATOR = 46;
     }
 }
