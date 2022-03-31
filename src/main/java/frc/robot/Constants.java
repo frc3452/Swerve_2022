@@ -19,6 +19,8 @@ package frc.robot;
 public final class Constants {
     public static final double ROBOT_LENGTH = 30;
     public static final double ROBOT_WIDTH = 30;
+    public static final double MAX_LINEAR_VELOCITY = 4.2;
+    public static final double MAX_ANGULAR_VELOCITY = 5;
     public static final double DEFAULT_DEADBAND = 0.15;
     public static final double WHEEL_DIAMETER = 0.245;
 

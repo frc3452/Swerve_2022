@@ -5,33 +5,43 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class wpilibSwerveDrive extends SubsystemBase {
+  SwerveDriveKinematics m_kinematics;
+  ChassisSpeeds speeds;
   /** Creates a new wpilibSwerveDrive. */
   public wpilibSwerveDrive() {
 
-    private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-      // Front left
-      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
-      // Front right
-      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
-      // Front left
-      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2),
-      // Front right
-      new Translation2d(Constants.ROBOT_LENGTH / 2, Constants.ROBOT_WIDTH / 2)
-    );
+      Translation2d m_frontLeftModule = new Translation2d(Constants.ROBOT_WIDTH / 2, Constants.ROBOT_LENGTH / 2);
+      Translation2d m_frontRightModule = new Translation2d(Constants.ROBOT_WIDTH / 2, Constants.ROBOT_LENGTH / 2);
+      Translation2d m_backLeftModule = new Translation2d(Constants.ROBOT_WIDTH / 2, Constants.ROBOT_LENGTH / 2);
+      Translation2d m_backRightModule = new Translation2d(Constants.ROBOT_WIDTH / 2, Constants.ROBOT_LENGTH / 2);
 
-    private final SwerveModule m_frontLeftModule;
-    private final SwerveModule m_frontRightModule;
-    private final SwerveModule m_backLeftModule;
-    private final SwerveModule m_backRightModule;
+      m_kinematics = new SwerveDriveKinematics(
+        m_frontLeftModule, m_frontRightModule, m_backLeftModule, m_backRightModule
+      );
+
+      speeds = new ChassisSpeeds(0, 0, 0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void drive(double roll, double pitch, double yaw) {
+    speeds = new ChassisSpeeds(roll, pitch,yaw);
+
+    SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
+    SwerveModuleState frontLeft = moduleStates[0];
+    SwerveModuleState frontRight = moduleStates[2];
+    SwerveModuleState backLeft = moduleStates[3];
+    SwerveModuleState backRight = moduleStates[4];
+
   }
 }

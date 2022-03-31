@@ -1,39 +1,66 @@
-// Copyright (c) FIRST and other WPILib contributors.
+// CopyBack (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
-  private CANSparkMax shooterLeft;
-  private CANSparkMax shooterRight;
+  private CANSparkMax shooterFront;
+  private CANSparkMax shooterBack;
+  private final SparkMaxPIDController pidControllerFront;
+  private final SparkMaxPIDController pidControllerBack;
+  double frontSpeed;
+  double backSpeed;
+  private RelativeEncoder frontEncoder;
+  private RelativeEncoder backEncoder;
+
+
   /** Creates a new Shooter. */
-  public Shooter(int shooterLeft, int shooterRight) {
-    this.shooterLeft = new CANSparkMax(shooterLeft, MotorType.kBrushless);
-    this.shooterLeft.setInverted(true);
-    this.shooterLeft.setIdleMode(IdleMode.kCoast);
-    // this.shooterLeft.set(30);
+  public Shooter(int shooterFront, int shooterBack) {
+    this.shooterFront = new CANSparkMax(shooterFront, MotorType.kBrushless);
+    this.shooterFront.setSmartCurrentLimit(40);
+    this.shooterFront.setInverted(false);
+    this.shooterFront.setIdleMode(IdleMode.kCoast);
 
-    this.shooterRight = new CANSparkMax(shooterRight, MotorType.kBrushless);
-    this.shooterRight.setInverted(true);
-    this.shooterRight.setIdleMode(IdleMode.kCoast);
-    // this.shooterRight.set(16);
+    this.pidControllerFront = this.shooterFront.getPIDController();
+    this.pidControllerFront.setP(1e-4);
+    this.pidControllerFront.setFF(0.000195);
+  
+    this.frontEncoder = this.shooterFront.getEncoder();
 
+    this.shooterBack = new CANSparkMax(shooterBack, MotorType.kBrushless);
+    this.shooterBack.setSmartCurrentLimit(40);
+    this.shooterBack.setInverted(false);
+    this.shooterBack.setIdleMode(IdleMode.kCoast);
+
+    this.pidControllerBack = this.shooterBack.getPIDController();
+    this.pidControllerBack.setP(1e-4);
+    this.pidControllerBack.setFF(0.000195);
+
+    this.backEncoder = this.shooterBack.getEncoder();
+    Shuffleboard.getTab("graphing").addNumber("front rpm",()-> this.frontEncoder.getVelocity());
+    Shuffleboard.getTab("graphing").addNumber("back rpm",()-> this.backEncoder.getVelocity());
   }
 
   public void shoot() {
-    this.shooterLeft.set(Preferences.getDouble("frontSpeed", -.85));
-    this.shooterRight.set(Preferences.getDouble("backSpeed", -.85));
+    frontSpeed = Preferences.getDouble("frontSpeed", .85)*56.76;
+    this.pidControllerFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
+    backSpeed = Preferences.getDouble("backSpeed", .85)*1.88;
+    this.pidControllerBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
   }
 
   public void stop() {
-    this.shooterLeft.set(0);
-    this.shooterRight.set(0);
+    this.shooterFront.set(0);
+    this.shooterBack.set(0);
   }
 }
