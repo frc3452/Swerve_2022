@@ -37,7 +37,6 @@ public class WheelDrive {
 
     private final EncoderUnitConverter azimuthConverter, driveConverter;
 
-
     // double Position;
     private double azimuthOffset;
 
@@ -55,8 +54,7 @@ public class WheelDrive {
                 1.0,
                 60.0,
                 1.0,
-                Units.inchesToMeters(2.0 + (15.0 / 16.0)) / 2.0
-        );
+                Units.inchesToMeters(2.0 + (15.0 / 16.0)) / 2.0);
 
         this.azimuth = new TalonSRX(azimuth);
         this.azimuth.configFactoryDefault();
@@ -92,6 +90,7 @@ public class WheelDrive {
         double driveTicks = driveEncoder.getVelocity();
         currentState = new SwerveModuleState(driveConverter.velocity_tick_to_unit(driveTicks),
                 new Rotation2d(azimuthConverter.position_tick_to_unit(azimuthTicks)));
+        // if (modulePosition == 2) System.out.println(currentState);
     }
 
     SwerveModuleState getCurrentState() {
@@ -99,19 +98,26 @@ public class WheelDrive {
     }
 
     public void drive(SwerveModuleState desired) {
-        var optimized = SwerveModuleState.optimize(desired, currentState.angle);
+        if (modulePosition == 2)
+            System.out.println(desired);
+        var optimized = SwerveUtil.optimization(currentState, desired);
         azimuth.set(
                 ControlMode.Position,
                 azimuthConverter.position_unit_to_tick(optimized.angle.getDegrees()));
-        drivePID.setReference(
-                driveConverter.velocity_unit_to_tick(optimized.speedMetersPerSecond),
-                CANSparkMax.ControlType.kVelocity);
-    }
 
+        var percent = optimized.speedMetersPerSecond / Units.inchesToMeters(297);
+        drivePID.setReference(percent, CANSparkMax.ControlType.kDutyCycle);
+
+        // System.out.println();
+        // drivePID.setReference(
+        // driveConverter.velocity_unit_to_tick(optimized.speedMetersPerSecond),
+        // CANSparkMax.ControlType.kVelocity);
+    }
 
     public void zeroAzimuth() {
         azimuthOffset = this.azimuth.getSelectedSensorPosition() % 4096;
-        if (azimuthOffset < 0) azimuthOffset += 4096;
+        if (azimuthOffset < 0)
+            azimuthOffset += 4096;
         Preferences.setDouble(String.valueOf(modulePosition), azimuthOffset);
     }
 }

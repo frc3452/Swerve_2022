@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -31,7 +32,8 @@ public class SwerveDrive implements Subsystem {
     private Rotation2d gyroAngle;
 
     private final SwerveDriveKinematics kinematics;
-
+    private final SwerveDriveOdometry odometry;
+    private Object pose;
 
     public SwerveDrive() {
         backRight = new WheelDrive(0, Constants.C_SwerveModules.BACK_RIGHT_AZIMUTH, Constants.C_SwerveModules.BACK_RIGHT_SPEED);
@@ -52,12 +54,18 @@ public class SwerveDrive implements Subsystem {
         kinematics = new SwerveDriveKinematics(
                 moduleLocations
         );
+
+        
+        gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+        odometry = new SwerveDriveOdometry(kinematics, gyroAngle);
     }
 
     @Override
     public void periodic() {
         modules.forEach(WheelDrive::update);
-        gyroAngle = Rotation2d.fromDegrees(gyro.getAngle());
+        gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+
+        pose = odometry.update(gyroAngle, modules.stream().map(WheelDrive::getCurrentState).toArray(SwerveModuleState[]::new));
     }
 
     public void stop() {
@@ -71,8 +79,7 @@ public class SwerveDrive implements Subsystem {
                     chassisSpeeds.vxMetersPerSecond,
                     chassisSpeeds.vyMetersPerSecond,
                     chassisSpeeds.omegaRadiansPerSecond,
-                    gyroAngle
-            );
+                    gyroAngle);
         } else {
             relativeSpeeds = chassisSpeeds;
         }

@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.util.Util;
@@ -33,7 +34,11 @@ public class SwerveDriveCommand extends CommandBase {
         double x1 = Util.deadband(joystickdrive.getRawAxis(0));
         double y1 = Util.deadband(-joystickdrive.getRawAxis(1));
         double x2 = Util.deadband(joystickdrive.getRawAxis(4));
-        //scale
+
+        x1 *= Constants.MAX_LINEAR_VELOCITY;
+        y1 *= Constants.MAX_LINEAR_VELOCITY;
+        x2 *= Constants.MAX_ANGULAR_VELOCITY;
+
         swerve.drive(new ChassisSpeeds(x1, y1, x2), isFieldRelative.getAsBoolean());
     }
 

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
+import frc.robot.util.Util;
 
 public class ClimberCommand extends CommandBase {
   private final XboxController joystick;
@@ -22,8 +23,8 @@ public class ClimberCommand extends CommandBase {
 
   @Override
   public void execute() {
-    double climberLeft = RobotContainer.deadband(joystick.getRawAxis(0));
-    double climberRight = RobotContainer.deadband(joystick.getRawAxis(4));
+    double climberLeft = Util.deadband(joystick.getRawAxis(0));
+    double climberRight = Util.deadband(joystick.getRawAxis(4));
 
     climber.climber(climberLeft, climberRight);
 

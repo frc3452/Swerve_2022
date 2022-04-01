@@ -39,9 +39,9 @@ public class wpilibSwerveDrive extends SubsystemBase {
 
     SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
     SwerveModuleState frontLeft = moduleStates[0];
-    SwerveModuleState frontRight = moduleStates[2];
-    SwerveModuleState backLeft = moduleStates[3];
-    SwerveModuleState backRight = moduleStates[4];
+    SwerveModuleState frontRight = moduleStates[1];
+    SwerveModuleState backLeft = moduleStates[2];
+    SwerveModuleState backRight = moduleStates[3];
 
   }
 }

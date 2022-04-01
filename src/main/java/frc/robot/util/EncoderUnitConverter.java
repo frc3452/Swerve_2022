@@ -58,7 +58,7 @@ public class EncoderUnitConverter {
         return position_unit_to_control_unit.scale(position_unit);
     }
 
-    public synchronized double velocity_unit_to_control_unit(double velocity_unit) {
+public synchronized double velocity_unit_to_control_unit(double velocity_unit) {
         return velocity_unit_to_control_unit.scale(velocity_unit);
     }
 

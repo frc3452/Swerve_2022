@@ -14,7 +14,6 @@ import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.commands.autonomous.BackandShoot;
 import frc.robot.commands.autonomous.Backup;
-import frc.robot.commands.autonomous.ExampleAuto;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.swerve.SwerveDrive;
@@ -86,7 +85,7 @@ public class RobotContainer {
 
         chooser.addOption("BackandShoot", new BackandShoot(swerve, index, shooter));
         chooser.addOption("Back Up", new Backup(swerve));
-        chooser.addOption("ShootandBackUp", new ExampleAuto(swerve, index, shooter));
+        // chooser.addOption("ShootandBackUp", new ExampleAuto(swerve, index, shooter));
 
         SmartDashboard.putData(chooser);
 

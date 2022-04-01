@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase {
   public void shoot() {
     frontSpeed = Preferences.getDouble("frontSpeed", .85)*56.76;
     this.pidControllerFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
-    backSpeed = Preferences.getDouble("backSpeed", .85)*1.88;
+    backSpeed = Preferences.getDouble("backSpeed", .85)*56.76;
     this.pidControllerBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
   }
 
