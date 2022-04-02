@@ -22,16 +22,17 @@ public class Limelight implements Subsystem {
 
     private boolean validTarget = false;
 
-    // public void UpdateTracking() {
-    //     if (tv. != 1.0) {
-    //         validTarget = false;
-    //         return;
-    //     }
+        public void UpdateTracking() {
+          if (tv.getDouble(-7.0) != 1.0) {
+               validTarget = false;
+               return;
+           }
 
-    //     validTarget = true;
-    // }
+           validTarget = true;
+           
+        }
 
-    private double calculateDistance() {
+    public double calculateDistance() {
 
         double targetOffsetAngle_Vertical = ty.getDouble(0.0);
         double angleToGoal = (C_Limelight.MOUNT_ANGLE + targetOffsetAngle_Vertical) * (Math.PI/180.0);
@@ -43,15 +44,26 @@ public class Limelight implements Subsystem {
 
     }
 
+    public double tx() {
+
+        double offset_from_target = tx.getDouble(-7.0);
+        return offset_from_target;
+    }
+
     @Override
     public void periodic() {
         double x = tx.getDouble(-7.0);
         double y = ty.getDouble(-7.0);
+        double target = tv.getDouble(-7.0);
         double area = ta.getDouble(-7.0);
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("Distance From Target", calculateDistance());
+        SmartDashboard.putNumber("Valid Target", target);
+
+        UpdateTracking();
+
     }
 
 }
