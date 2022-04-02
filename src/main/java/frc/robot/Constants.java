@@ -66,7 +66,7 @@ public final class Constants {
     }
 
     public final class C_Limelight {
-        public static final double MOUNT_ANGLE = 60.0;
+        public static final double MOUNT_ANGLE = 24.03;
         public static final double DISTANCE_FROM_FLOOR = 86.36;
         public static final double GOAL_HEIGHT = 264.0;
     }
