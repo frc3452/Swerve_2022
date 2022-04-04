@@ -27,6 +27,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    System.out.println("swervy");
     if (++loop_counter > 1000) {
       System.out.println("Running " + (prints++));
       loop_counter = 0;

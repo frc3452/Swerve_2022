@@ -4,6 +4,8 @@
 
 package frc.robot.swerve;
 
+import java.util.function.Supplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
@@ -18,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import frc.robot.util.EncoderUnitConverter;
 import frc.robot.util.SwerveUtil;
@@ -83,6 +86,14 @@ public class WheelDrive {
         this.driveEncoder = this.speedMotor.getEncoder();
 
         azimuthOffset = Preferences.getDouble(String.valueOf(modulePosition), -3452);
+        Shuffleboard.getTab("swervy").addString("Module " + module, new Supplier<String>() {
+            @Override
+            public String get() {
+                if (currentState != null) return currentState.toString();
+                return "nah";
+            }
+        });
+        System.out.println("swervy");
     }
 
     void update() {
@@ -91,6 +102,7 @@ public class WheelDrive {
         currentState = new SwerveModuleState(driveConverter.velocity_tick_to_unit(driveTicks),
                 new Rotation2d(azimuthConverter.position_tick_to_unit(azimuthTicks)));
         // if (modulePosition == 2) System.out.println(currentState);
+        
     }
 
     SwerveModuleState getCurrentState() {
@@ -100,18 +112,19 @@ public class WheelDrive {
     public void drive(SwerveModuleState desired) {
         if (modulePosition == 2)
             System.out.println(desired);
-        var optimized = SwerveUtil.optimization(currentState, desired);
+            var optimized = desired;
+        // var optimized = SwerveUtil.optimization(currentState, desired);
         azimuth.set(
                 ControlMode.Position,
-                azimuthConverter.position_unit_to_tick(optimized.angle.getDegrees()));
+                azimuthConverter.position_unit_to_tick(optimized.angle.getRadians()));
 
         var percent = optimized.speedMetersPerSecond / Units.inchesToMeters(297);
         drivePID.setReference(percent, CANSparkMax.ControlType.kDutyCycle);
 
         // System.out.println();
-        // drivePID.setReference(
-        // driveConverter.velocity_unit_to_tick(optimized.speedMetersPerSecond),
-        // CANSparkMax.ControlType.kVelocity);
+        drivePID.setReference(
+        driveConverter.velocity_unit_to_tick(optimized.speedMetersPerSecond),
+        CANSparkMax.ControlType.kVelocity);
     }
 
     public void zeroAzimuth() {
