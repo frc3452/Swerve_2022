@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -69,5 +72,13 @@ public final class Constants {
         public static final double MOUNT_ANGLE = 24.03;
         public static final double DISTANCE_FROM_FLOOR = 86.36;
         public static final double GOAL_HEIGHT = 264.0;
+    }
+
+    public static final class C_FIELD_COORDINATES {
+        public static final Translation2d origin = 
+        new Translation2d(0, 0).plus(
+            new Translation2d(1, Rotation2d.fromDegrees(56))); //Location of the center of the field + a Translation2d with distance and angle
+
+        
     }
 }
