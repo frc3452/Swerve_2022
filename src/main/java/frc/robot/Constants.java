@@ -75,9 +75,17 @@ public final class Constants {
     }
 
     public static final class C_FIELD_COORDINATES {
-        public static final Translation2d origin = 
+        public static final Translation2d ORIGIN = 
         new Translation2d(0, 0).plus(
             new Translation2d(1, Rotation2d.fromDegrees(56))); //Location of the center of the field + a Translation2d with distance and angle
+
+        private static final double ball_radius = 3.8862;
+        public static final Translation2d CENTER = new Translation2d(8.2296,4.1148); //in meters
+
+        public static final Translation2d FIRST = new Translation2d(ball_radius, Rotation2d.fromDegrees(33.8));
+        public static final Translation2d SECOND = new Translation2d(ball_radius, Rotation2d.fromDegrees(101.41));
+        public static final Translation2d THIRD = new Translation2d(ball_radius, Rotation2d.fromDegrees(146.10));
+        public static final Translation2d FOURTH = new Translation2d(305.66, Rotation2d.fromDegrees(66));
 
         
     }
