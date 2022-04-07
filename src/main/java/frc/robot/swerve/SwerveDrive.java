@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.swerve.WheelDrive;
@@ -36,26 +37,28 @@ public class SwerveDrive implements Subsystem {
     private Object pose;
 
     public SwerveDrive() {
-        backRight = new WheelDrive(0, Constants.C_SwerveModules.BACK_RIGHT_AZIMUTH, Constants.C_SwerveModules.BACK_RIGHT_SPEED);
-        backLeft = new WheelDrive(1, Constants.C_SwerveModules.BACK_LEFT_AZIMUTH, Constants.C_SwerveModules.BACK_LEFT_SPEED);
-        frontRight = new WheelDrive(2, Constants.C_SwerveModules.FRONT_RIGHT_AZIMUTH, Constants.C_SwerveModules.FRONT_RIGHT_SPEED);
-        frontLeft = new WheelDrive(3, Constants.C_SwerveModules.FRONT_LEFT_AZIMUTH, Constants.C_SwerveModules.FRONT_LEFT_SPEED);
+        backRight = new WheelDrive(0, Constants.C_SwerveModules.BACK_RIGHT_AZIMUTH,
+                Constants.C_SwerveModules.BACK_RIGHT_SPEED);
+        backLeft = new WheelDrive(1, Constants.C_SwerveModules.BACK_LEFT_AZIMUTH,
+                Constants.C_SwerveModules.BACK_LEFT_SPEED);
+        frontRight = new WheelDrive(2, Constants.C_SwerveModules.FRONT_RIGHT_AZIMUTH,
+                Constants.C_SwerveModules.FRONT_RIGHT_SPEED);
+        frontLeft = new WheelDrive(3, Constants.C_SwerveModules.FRONT_LEFT_AZIMUTH,
+                Constants.C_SwerveModules.FRONT_LEFT_SPEED);
         gyro = new AHRS();
 
         modules = List.of(backRight, backLeft, frontRight, frontLeft);
 
         var w = Constants.ROBOT_WIDTH / 2.0;
         var l = Constants.ROBOT_LENGTH / 2.0;
-        Translation2d[] moduleLocations = {new Translation2d(-l, -w),
+        Translation2d[] moduleLocations = { new Translation2d(-l, -w),
                 new Translation2d(-l, w),
                 new Translation2d(l, -w),
-                new Translation2d(l, w)};
+                new Translation2d(l, w) };
 
         kinematics = new SwerveDriveKinematics(
-                moduleLocations
-        );
+                moduleLocations);
 
-        
         gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
         odometry = new SwerveDriveOdometry(kinematics, gyroAngle);
     }
@@ -65,7 +68,8 @@ public class SwerveDrive implements Subsystem {
         modules.forEach(WheelDrive::update);
         gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
 
-        pose = odometry.update(gyroAngle, modules.stream().map(WheelDrive::getCurrentState).toArray(SwerveModuleState[]::new));
+        pose = odometry.update(gyroAngle,
+                modules.stream().map(WheelDrive::getCurrentState).toArray(SwerveModuleState[]::new));
     }
 
     public void stop() {
@@ -86,6 +90,12 @@ public class SwerveDrive implements Subsystem {
 
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(relativeSpeeds);
 
+            
+        SmartDashboard.putString("States", 
+        List.of(swerveModuleStates)
+            .stream()
+            .map(e -> e.angle.toString())
+            .collect(Collectors.toList()).toString());
         for (int i = 0; i < swerveModuleStates.length; i++) {
             SwerveModuleState state = swerveModuleStates[i];
             modules.get(i).drive(state);

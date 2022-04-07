@@ -5,11 +5,13 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveUtil {
 
+
     public static SwerveModuleState optimization(SwerveModuleState currentState, SwerveModuleState desiredState) {
-        desiredState.angle = Rotation2d.fromDegrees(
+        SwerveModuleState angleOptimized = SwerveModuleState.optimize(desiredState, currentState.angle);
+        angleOptimized.angle = Rotation2d.fromDegrees(
                 SwerveUtil.placeInAppropriate0To360Scope(currentState.angle.getDegrees(),
-                        desiredState.angle.getDegrees()));
-        return SwerveModuleState.optimize(desiredState, currentState.angle);
+                        angleOptimized.angle.getDegrees()));
+        return angleOptimized;
     }
 
     public static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {

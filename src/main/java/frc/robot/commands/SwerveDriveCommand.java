@@ -13,13 +13,20 @@ import java.util.function.DoubleSupplier;
 
 public class SwerveDriveCommand extends CommandBase {
 
-    private final XboxController joystickdrive;
+    private final DoubleSupplier xSupplier, ySupplier, omegaSupplier;
     private final BooleanSupplier isFieldRelative;
     private final SwerveDrive swerve;
 
-    public SwerveDriveCommand(SwerveDrive swerve, XboxController joystickDrive, BooleanSupplier isFieldRelative) {
+    public SwerveDriveCommand(
+            SwerveDrive swerve,
+            DoubleSupplier xSupplier,
+            DoubleSupplier ySupplier,
+            DoubleSupplier omegaSupplier,
+            BooleanSupplier isFieldRelative) {
         this.swerve = swerve;
-        this.joystickdrive = joystickDrive;
+        this.xSupplier = xSupplier;
+        this.ySupplier = ySupplier;
+        this.omegaSupplier = omegaSupplier;
         this.isFieldRelative = isFieldRelative;
         addRequirements(swerve);
     }
@@ -31,17 +38,8 @@ public class SwerveDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double x1 = Util.deadband(joystickdrive.getRawAxis(0));
-        double y1 = Util.deadband(-joystickdrive.getRawAxis(1));
-        double x2 = Util.deadband(joystickdrive.getRawAxis(4));
-
-        x1 *= Constants.MAX_LINEAR_VELOCITY;
-        y1 *= Constants.MAX_LINEAR_VELOCITY;
-        x2 *= Constants.MAX_ANGULAR_VELOCITY;
-
-        swerve.drive(new ChassisSpeeds(x1, y1, x2), isFieldRelative.getAsBoolean());
+        swerve.drive(new ChassisSpeeds(xSupplier.getAsDouble(), ySupplier.getAsDouble(), omegaSupplier.getAsDouble()), isFieldRelative.getAsBoolean());
     }
-
 
     @Override
     public boolean isFinished() {

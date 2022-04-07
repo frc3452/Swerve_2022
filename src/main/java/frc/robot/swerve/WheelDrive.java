@@ -63,9 +63,10 @@ public class WheelDrive {
         this.azimuth.configFactoryDefault();
         this.azimuth.config_kP(0, 3.5);
         this.azimuth.config_kD(0, 80);
-        this.azimuth.setInverted(false);
+        this.azimuth.setInverted(true);
 
         this.azimuth.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.CTRE_MagEncoder_Absolute, 0, 100);
+        this.azimuth.setSensorPhase(false);
 
         this.azimuth.configContinuousCurrentLimit(30);
         this.azimuth.configPeakCurrentLimit(15);
@@ -86,6 +87,7 @@ public class WheelDrive {
         this.driveEncoder = this.speedMotor.getEncoder();
 
         azimuthOffset = Preferences.getDouble(String.valueOf(modulePosition), -3452);
+
         Shuffleboard.getTab("swervy").addString("Module " + module, new Supplier<String>() {
             @Override
             public String get() {
@@ -93,7 +95,6 @@ public class WheelDrive {
                 return "nah";
             }
         });
-        System.out.println("swervy");
     }
 
     void update() {
@@ -110,21 +111,24 @@ public class WheelDrive {
     }
 
     public void drive(SwerveModuleState desired) {
-        if (modulePosition == 2)
-            System.out.println(desired);
-            var optimized = desired;
-        // var optimized = SwerveUtil.optimization(currentState, desired);
+        // azimuth.set(ControlMode.PercentOutput, 0.1);
+        // drivePID.setReference(0.1, CANSparkMax.ControlType.kDutyCycle);
+
+        var optimized = SwerveUtil.optimization(currentState, desired);
+
+        if (desired.speedMetersPerSecond != 0) {
+        // var optimized = desired;
         azimuth.set(
                 ControlMode.Position,
-                azimuthConverter.position_unit_to_tick(optimized.angle.getRadians()));
-
+                azimuthConverter.position_unit_to_tick(optimized.angle.getRadians()) + azimuthOffset);
+    }
         var percent = optimized.speedMetersPerSecond / Units.inchesToMeters(297);
         drivePID.setReference(percent, CANSparkMax.ControlType.kDutyCycle);
 
-        // System.out.println();
-        drivePID.setReference(
-        driveConverter.velocity_unit_to_tick(optimized.speedMetersPerSecond),
-        CANSparkMax.ControlType.kVelocity);
+        // System.out.println();\[]
+        // drivePID.setReference(
+        // driveConverter.velocity_unit_to_tick(optimized.speedMetersPerSecond),
+        // CANSparkMax.ControlType.kVelocity);
     }
 
     public void zeroAzimuth() {
