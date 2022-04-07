@@ -15,6 +15,7 @@ public class Intake extends SubsystemBase {
   public Intake(int intake, int lowerIndex) {
     this.intake = new TalonSRX(intake);
     this.lowerIndex = new TalonSRX(lowerIndex);
+    this.lowerIndex.setInverted(true);
   }
 
   public void intake(double intakeSpeed, double indexSpeed) {

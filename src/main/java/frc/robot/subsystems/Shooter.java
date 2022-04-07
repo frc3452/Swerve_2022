@@ -45,17 +45,21 @@ public class Shooter extends SubsystemBase {
 
     this.pidControllerBack = this.shooterBack.getPIDController();
     this.pidControllerBack.setP(1e-4);
-    this.pidControllerBack.setFF(0.000195);
+    this.pidControllerBack.setFF(0.000175);
 
     this.backEncoder = this.shooterBack.getEncoder();
+    
+    Preferences.initDouble("frontSpeed", 0.0);
+    Preferences.initDouble("backSpeed", 0.0);
+
     Shuffleboard.getTab("graphing").addNumber("front rpm",()-> this.frontEncoder.getVelocity());
     Shuffleboard.getTab("graphing").addNumber("back rpm",()-> this.backEncoder.getVelocity());
   }
 
   public void shoot() {
-    frontSpeed = Preferences.getDouble("frontSpeed", .85)*56.76;
+    frontSpeed = Preferences.getDouble("frontSpeed", .85);
     this.pidControllerFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
-    backSpeed = Preferences.getDouble("backSpeed", .85)*1.88;
+    backSpeed = Preferences.getDouble("backSpeed", .85);
     this.pidControllerBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
   }
 

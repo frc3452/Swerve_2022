@@ -65,10 +65,8 @@ public class RobotContainer {
     swerve.setDefaultCommand(new SwerveDriveCommand(swerve, joystickDrive));
 
     new JoystickButton(joystickControl, Button.kA.value)
-        .whileHeld(new IntakeCommand(intake, false));
-    
-    new JoystickButton(joystickDrive, Button.kA.value)
         .whileHeld(new IntakeCommand(intake, true));
+    
   
     new JoystickButton(joystickControl, Button.kRightBumper.value)
         .whileHeld(new IntakeActuationCommand(actuator, false));
@@ -79,11 +77,11 @@ public class RobotContainer {
     new JoystickButton(joystickControl, Button.kB.value)
         .whileHeld(new ShooterCommand(shooter, true));
 
-    new JoystickButton(joystickControl, Button.kY.value)
+    new JoystickButton(joystickControl, Button.kX.value)
         .whileHeld(new UpperIndexCommand(index, true));
 
-    new JoystickButton(joystickDrive, Button.kY.value)
-        .whileHeld(new UpperIndexCommand(index, false));
+    new JoystickButton(joystickControl, Button.kY.value)
+        .whileHeld(new UpperIndexCommand(index, false).alongWith(new IntakeCommand(intake, false)));
 
     new JoystickButton(joystickDrive, Button.kStart.value)
         .whenPressed(new InstantCommand(() -> {
