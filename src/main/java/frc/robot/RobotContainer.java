@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -99,15 +100,15 @@ public class RobotContainer {
         }
 
         private double getX() {
-                return Util.deadband(-joystickDrive.getRawAxis(1));
+                return Util.deadband(-joystickDrive.getRawAxis(1) * (1/0.25));
         }
 
         private double getY() {
-                return Util.deadband(-joystickDrive.getRawAxis(0));
+                return Util.deadband(-joystickDrive.getRawAxis(0) * (1/0.25));
         }
 
         private double getOmega() {
-                return Util.deadband(joystickDrive.getRawAxis(2)-joystickDrive.getRawAxis(3));
+                return Util.deadband(joystickDrive.getRawAxis(2)-joystickDrive.getRawAxis(3)) * Units.degreesToRadians(360);
         }
 
         /**

@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -49,8 +50,8 @@ public class SwerveDrive implements Subsystem {
 
         modules = List.of(backRight, backLeft, frontRight, frontLeft);
 
-        var w = Constants.ROBOT_WIDTH / 2.0;
-        var l = Constants.ROBOT_LENGTH / 2.0;
+        var w = Units.inchesToMeters(Constants.ROBOT_WIDTH) / 2.0;
+        var l = Units.inchesToMeters(Constants.ROBOT_LENGTH) / 2.0;
         Translation2d[] moduleLocations = { new Translation2d(-l, -w),
                 new Translation2d(-l, w),
                 new Translation2d(l, -w),
