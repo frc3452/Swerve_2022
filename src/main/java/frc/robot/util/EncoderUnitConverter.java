@@ -24,8 +24,8 @@ public class EncoderUnitConverter {
         //motor rotations -> motor ticks
         //(unit / (2.0 * Math.PI)) * gearing_from_encoder_to_wheel * ticks_per_rotation;
         position_unit_to_tick = new Scale((gearing_from_encoder_to_wheel * ticks_per_rotation) / (2.0 * Math.PI));
-        velocity_unit_to_tick = Scale.from(time_unit_in_seconds, position_tick_to_unit);
-        velocity_tick_to_unit = Scale.from(1.0 / time_unit_in_seconds, position_unit_to_tick);
+        velocity_unit_to_tick = Scale.from(time_unit_in_seconds, position_unit_to_tick);
+        velocity_tick_to_unit = Scale.from(1.0 / time_unit_in_seconds, position_tick_to_unit);
 
         if (!Double.isNaN(radius)) {
             position_tick_to_unit.addScale(radius);

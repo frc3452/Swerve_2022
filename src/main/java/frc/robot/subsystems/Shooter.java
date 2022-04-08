@@ -17,12 +17,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
   private CANSparkMax shooterFront;
   private CANSparkMax shooterBack;
-  private final SparkMaxPIDController pidControllerFront;
-  private final SparkMaxPIDController pidControllerBack;
+  private final SparkMaxPIDController pidControllerShooterFront;
+  private final SparkMaxPIDController pidControllerShooterBack;
   double frontSpeed;
   double backSpeed;
-  private RelativeEncoder frontEncoder;
-  private RelativeEncoder backEncoder;
+  private RelativeEncoder EncoderShooterFront;
+  private RelativeEncoder EncoderShooterBack;
 
 
   /** Creates a new Shooter. */
@@ -32,31 +32,32 @@ public class Shooter extends SubsystemBase {
     this.shooterFront.setInverted(false);
     this.shooterFront.setIdleMode(IdleMode.kCoast);
 
-    this.pidControllerFront = this.shooterFront.getPIDController();
-    this.pidControllerFront.setP(1e-4);
-    this.pidControllerFront.setFF(0.000195);
+    this.pidControllerShooterFront = this.shooterFront.getPIDController();
+    this.pidControllerShooterFront.setP(1e-4);
+    this.pidControllerShooterFront.setFF(0.000195);
   
-    this.frontEncoder = this.shooterFront.getEncoder();
+    this.EncoderShooterFront = this.shooterFront.getEncoder();
 
     this.shooterBack = new CANSparkMax(shooterBack, MotorType.kBrushless);
     this.shooterBack.setSmartCurrentLimit(40);
     this.shooterBack.setInverted(false);
     this.shooterBack.setIdleMode(IdleMode.kCoast);
 
-    this.pidControllerBack = this.shooterBack.getPIDController();
-    this.pidControllerBack.setP(1e-4);
-    this.pidControllerBack.setFF(0.000195);
+    this.pidControllerShooterBack = this.shooterBack.getPIDController();
+    this.pidControllerShooterBack.setP(1e-4);
+    this.pidControllerShooterBack.setFF(0.000195);
 
-    this.backEncoder = this.shooterBack.getEncoder();
-    Shuffleboard.getTab("graphing").addNumber("front rpm",()-> this.frontEncoder.getVelocity());
-    Shuffleboard.getTab("graphing").addNumber("back rpm",()-> this.backEncoder.getVelocity());
+    this.EncoderShooterBack = this.shooterBack.getEncoder();
+    
+    Shuffleboard.getTab("graphing").addNumber("front rpm",()-> this.EncoderShooterFront.getVelocity());
+    Shuffleboard.getTab("graphing").addNumber("back rpm",()-> this.EncoderShooterBack.getVelocity());
   }
 
   public void shoot() {
     frontSpeed = Preferences.getDouble("frontSpeed", .85)*56.76;
-    this.pidControllerFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
+    this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
     backSpeed = Preferences.getDouble("backSpeed", .85)*56.76;
-    this.pidControllerBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
+    this.pidControllerShooterBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
   }
 
   public void stop() {

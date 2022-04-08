@@ -6,6 +6,7 @@ package frc.robot.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -13,7 +14,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
@@ -35,6 +38,7 @@ public class SwerveDrive implements Subsystem {
 
     private final SwerveDriveKinematics kinematics;
     private final SwerveDriveOdometry odometry;
+    private final Field2d field2d;
     private Object pose;
 
     public SwerveDrive() {
@@ -61,7 +65,10 @@ public class SwerveDrive implements Subsystem {
                 moduleLocations);
 
         gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
-        odometry = new SwerveDriveOdometry(kinematics, gyroAngle);
+        odometry = new SwerveDriveOdometry(kinematics, gyroAngle, new Pose2d(new Translation2d(15,(26*12+11.25)/2).times(0.0254), new Rotation2d()));
+
+        field2d = new Field2d();
+        SmartDashboard.putData("Field", field2d);
     }
 
     @Override
@@ -71,6 +78,8 @@ public class SwerveDrive implements Subsystem {
 
         pose = odometry.update(gyroAngle,
                 modules.stream().map(WheelDrive::getCurrentState).toArray(SwerveModuleState[]::new));
+
+        field2d.setRobotPose(odometry.getPoseMeters());
     }
 
     public void stop() {
@@ -105,5 +114,9 @@ public class SwerveDrive implements Subsystem {
 
     public void zeroAzimuth() {
         modules.forEach(WheelDrive::zeroAzimuth);
+    }
+
+    public void autonomous() {
+        // odometry.updateWithTime(currentTimeSeconds, gyroAngle, moduleStates)
     }
 }

@@ -4,6 +4,7 @@
 
 package frc.robot.swerve;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -53,7 +54,7 @@ public class WheelDrive {
                 Double.NaN);
 
         driveConverter = new EncoderUnitConverter(
-                3.0,
+                5.25,
                 1.0,
                 60.0,
                 1.0,
@@ -88,11 +89,11 @@ public class WheelDrive {
 
         azimuthOffset = Preferences.getDouble(String.valueOf(modulePosition), -3452);
 
-        Shuffleboard.getTab("swervy").addString("Module " + module, new Supplier<String>() {
+        Shuffleboard.getTab("swervy").addNumber("Module " + module, new DoubleSupplier() {
             @Override
-            public String get() {
-                if (currentState != null) return currentState.toString();
-                return "nah";
+            public double getAsDouble() {
+                if (currentState != null) return currentState.speedMetersPerSecond;
+                return 3452.0;
             }
         });
     }
