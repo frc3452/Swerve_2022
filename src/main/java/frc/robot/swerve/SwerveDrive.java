@@ -14,14 +14,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
-import frc.robot.swerve.WheelDrive;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +34,9 @@ public class SwerveDrive implements Subsystem {
 
     private final SwerveDriveKinematics kinematics;
     private final SwerveDriveOdometry odometry;
+    private ChassisSpeeds currentSpeed;
     private final Field2d field2d;
-    private Object pose;
+    private Pose2d pose;
 
     public SwerveDrive() {
         backRight = new WheelDrive(0, Constants.C_SwerveModules.BACK_RIGHT_AZIMUTH,
@@ -64,22 +61,42 @@ public class SwerveDrive implements Subsystem {
         kinematics = new SwerveDriveKinematics(
                 moduleLocations);
 
-        gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+        gyroAngle = getgyroangle();
         odometry = new SwerveDriveOdometry(kinematics, gyroAngle, new Pose2d(new Translation2d(15,(26*12+11.25)/2).times(0.0254), new Rotation2d()));
 
         field2d = new Field2d();
         SmartDashboard.putData("Field", field2d);
     }
 
+    private final Rotation2d getgyroangle() {
+        return Rotation2d.fromDegrees(-gyro.getAngle());
+    }
+
     @Override
     public void periodic() {
         modules.forEach(WheelDrive::update);
-        gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+        gyroAngle = getgyroangle();
 
+        SwerveModuleState[] states = modules.stream().map(WheelDrive::getCurrentState).toArray(SwerveModuleState[]::new);
+        
         pose = odometry.update(gyroAngle,
-                modules.stream().map(WheelDrive::getCurrentState).toArray(SwerveModuleState[]::new));
+                states);
 
+        currentSpeed = kinematics.toChassisSpeeds(states);
+                
         field2d.setRobotPose(odometry.getPoseMeters());
+    }
+
+    public ChassisSpeeds getCurrentSpeed() {
+        return currentSpeed;
+    }
+
+    public void resetPosition(Pose2d pose) {
+        odometry.resetPosition(pose, getgyroangle());
+    }
+
+    public Pose2d getpose() {
+        return pose;
     }
 
     public void stop() {
@@ -101,7 +118,7 @@ public class SwerveDrive implements Subsystem {
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(relativeSpeeds);
 
             
-        SmartDashboard.putString("States", 
+        SmartDashboard.putString("States",  
         List.of(swerveModuleStates)
             .stream()
             .map(e -> e.angle.toString())
