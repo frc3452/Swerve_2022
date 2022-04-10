@@ -22,11 +22,8 @@ public class TestAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0,0), new Rotation2d(0)))));
-    var move_to_position = new MoveToPosition(swerve, new Pose2d(new Translation2d(25,0), new Rotation2d(0)));
+    var move_to_position = new MoveToPosition(swerve, new Pose2d(new Translation2d(1,0), new Rotation2d(0)));
 
-    addCommands(move_to_position, new WaitCommand(20.0)
-    );
-      
-    
+    addCommands(move_to_position);
   }
 }
