@@ -126,7 +126,7 @@ public class WheelDrive {
         var percent = optimized.speedMetersPerSecond / Units.inchesToMeters(297);
         drivePID.setReference(percent, CANSparkMax.ControlType.kDutyCycle);
 
-        // System.out.println();\[]
+        // System.out.println();
         // drivePID.setReference(
         // driveConverter.velocity_unit_to_tick(optimized.speedMetersPerSecond),
         // CANSparkMax.ControlType.kVelocity);

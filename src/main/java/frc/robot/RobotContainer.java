@@ -16,6 +16,7 @@ import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.commands.autonomous.BackandShoot;
 import frc.robot.commands.autonomous.Backup;
+import frc.robot.commands.autonomous.TestAuto;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.swerve.SwerveDrive;
@@ -29,6 +30,8 @@ public class RobotContainer {
         private final XboxController joystickControl = new XboxController(1);
 
         private boolean fieldRelative = false;
+        private boolean constantIntake = false;
+        private boolean presetShootetr = false;
 
         private final Climber climber;
         private final Intake intake;
@@ -57,13 +60,9 @@ public class RobotContainer {
 
                 climber.setDefaultCommand(new ClimberCommand(climber, joystickControl));
                 swerve.setDefaultCommand(
-                                new SwerveDriveCommand(swerve, this::getX, this::getY, this::getOmega, () -> fieldRelative));
-
-                new JoystickButton(joystickControl, Button.kA.value)
-                                .whileHeld(new IntakeCommand(intake, false));
-
-                new JoystickButton(joystickDrive, Button.kA.value)
-                                .whileHeld(new IntakeCommand(intake, true));
+                                new SwerveDriveCommand(swerve, this::getX, this::getY, this::getOmega,
+                                                () -> fieldRelative));
+                // new ShooterLogic(intake, index, shooter);
 
                 new JoystickButton(joystickControl, Button.kRightBumper.value)
                                 .whileHeld(new IntakeActuationCommand(actuator, false));
@@ -71,17 +70,32 @@ public class RobotContainer {
                 new JoystickButton(joystickControl, Button.kLeftBumper.value)
                                 .whileHeld(new IntakeActuationCommand(actuator, true));
 
-                new JoystickButton(joystickControl, Button.kB.value)
-                                .whileHeld(new ShooterCommand(shooter, true));
+                new JoystickButton(joystickDrive, Button.kLeftBumper.value)
+                                .whileHeld(new IntakeCommand(intake, true));
 
                 new JoystickButton(joystickControl, Button.kY.value)
-                                .whileHeld(new UpperIndexCommand(index, true));
+                                .whileHeld(new IntakeCommand(intake, false));
 
-                new JoystickButton(joystickDrive, Button.kY.value)
+                new JoystickButton(joystickControl, Button.kY.value)
+                                .whileHeld(new ShooterCommand(shooter, false, false));
+
+                new JoystickButton(joystickControl, Button.kY.value)
                                 .whileHeld(new UpperIndexCommand(index, false));
+
+                new JoystickButton(joystickControl, Button.kB.value)
+                                .whileHeld(new ShooterCommand(shooter, false, true));
+
+                new JoystickButton(joystickDrive, Button.kRightBumper.value)
+                                .whileHeld(new UpperIndexCommand(index, true));
 
                 new JoystickButton(joystickDrive, Button.kStart.value)
                                 .whenPressed(new InstantCommand(() -> fieldRelative = !fieldRelative));
+
+                // new JoystickButton(joystickDrive, Button.kLeftBumper.value)
+                // .whenPressed(new InstantCommand(() -> constantIntake = !constantIntake));
+
+                // new JoystickButton(joystickControl, Button.kX.value)
+                // .whenPressed(new InstantCommand(() -> presetShootetr = !presetShootetr));
 
                 defaultAuto = new BackandShoot(swerve, index, shooter);
 
@@ -100,15 +114,20 @@ public class RobotContainer {
         }
 
         private double getX() {
-                return Util.deadband(-joystickDrive.getRawAxis(1) * (1/0.25));
+                return Util.deadband(-joystickDrive.getRawAxis(1) * (1 / 0.25));
         }
 
         private double getY() {
-                return Util.deadband(-joystickDrive.getRawAxis(0) * (1/0.25));
+                return Util.deadband(-joystickDrive.getRawAxis(0) * (1 / 0.25));
         }
 
         private double getOmega() {
-                return Util.deadband(joystickDrive.getRawAxis(2)-joystickDrive.getRawAxis(3)) * Units.degreesToRadians(360);
+                return Util.deadband(-joystickDrive.getRawAxis(4)) * Units.degreesToRadians(360);
+        }
+
+        private boolean getDrive(Button button) {
+                return new JoystickButton(joystickDrive, button.value).get();
+
         }
 
         /**
@@ -117,12 +136,12 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                // return new ExampleAuto(swerve, index, shooter);
-                Command selected = chooser.getSelected();
-                if (selected == null) {
-                        return defaultAuto;
-                } else {
-                        return selected;
-                }
+                return new TestAuto(swerve);
+                // Command selected = chooser.getSelected();
+                // if (selected == null) {
+                //         return defaultAuto;
+                // } else {
+                //         return selected;
+                // }
         }
 }

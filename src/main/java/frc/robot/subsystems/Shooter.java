@@ -54,9 +54,18 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot() {
-    frontSpeed = Preferences.getDouble("frontSpeed", .85)*56.76;
+    shoot(false);
+  }
+
+  public void shoot(boolean inverted) {
+    if (!inverted){ 
+      frontSpeed = Preferences.getDouble("frontSpeed", .85);
+      backSpeed = Preferences.getDouble("backSpeed", .85);
+    } else {
+      frontSpeed = Preferences.getDouble("frontSpeed", .85)*-1;
+      backSpeed = Preferences.getDouble("backSpeed", .85)*-1;
+    }
     this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
-    backSpeed = Preferences.getDouble("backSpeed", .85)*56.76;
     this.pidControllerShooterBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
   }
 

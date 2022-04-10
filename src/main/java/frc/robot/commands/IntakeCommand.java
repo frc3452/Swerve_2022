@@ -26,7 +26,7 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
     if(!direction){
-      intake.intake(.5, .75);
+      intake.intake(0.5, 0.75);
     }else{
       intake.intake(-0.5, -0.75);
     }

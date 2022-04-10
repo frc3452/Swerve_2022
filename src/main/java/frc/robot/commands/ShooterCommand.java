@@ -10,11 +10,13 @@ import frc.robot.subsystems.Shooter;
 public class ShooterCommand extends CommandBase {
 
   private final Shooter shooter;
-  private final boolean stop;
+  // private final boolean stop;
+  private boolean direction;
 
-  public ShooterCommand(Shooter shooter, boolean stop) {
+  public ShooterCommand(Shooter shooter, boolean stop, boolean direction) {
     this.shooter = shooter;
-    this.stop = stop;
+    // this.stop = stop;
+    this.direction = direction;
     addRequirements(shooter);
   }
 
@@ -23,14 +25,12 @@ public class ShooterCommand extends CommandBase {
   }
 
   public void execute() {
-    shooter.shoot();
+    shooter.shoot(!direction);
   }
 
   @Override
   public void end(boolean interrupted) {
-    if (stop) {
       shooter.stop();
-    } 
   }
 
   @Override
