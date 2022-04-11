@@ -14,7 +14,9 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.swerve.SwerveDrive;
 
 public class MoveToPosition extends CommandBase {
-  private PIDController pid;
+  private PIDController pidXY;
+  private PIDController pidOmega;
+
   /** Creates a new MoveToPosition. */
   private SwerveDrive swerve;
   private Pose2d current;
@@ -30,7 +32,8 @@ public class MoveToPosition extends CommandBase {
   public MoveToPosition(SwerveDrive swerve, Pose2d target) {
     this.swerve = swerve;
     this.target = target;
-    pid = new PIDController(100.0, 0.0, 50.0);
+    pidXY = new PIDController(5.0, 0.0, 0.0);
+    pidOmega = new PIDController(0.0, 0.0, 0.0);
     addRequirements(swerve);
   }
 
@@ -44,9 +47,9 @@ public class MoveToPosition extends CommandBase {
   public void execute() {
     
     current = swerve.getpose();
-    outputX = pid.calculate(current.getX(), target.getX());
-    outputY = pid.calculate(current.getY(), target.getY());
-    outputOmega = pid.calculate(current.getRotation().getDegrees(), target.getRotation().getDegrees());
+    outputX = pidXY.calculate(current.getX(), target.getX());
+    outputY = pidXY.calculate(current.getY(), target.getY());
+    outputOmega = pidOmega.calculate(current.getRotation().getDegrees(), target.getRotation().getDegrees());
 
     // translationError = target.getTranslation().minus(current.getTranslation());
     // rotationError = target.getRotation().minus(current.getRotation());
