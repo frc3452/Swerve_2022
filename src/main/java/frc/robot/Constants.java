@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import org.opencv.utils.Converters;
+
+import frc.robot.util.Util;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -65,5 +69,20 @@ public final class Constants {
 
     public static final class C_Actuator {
         public static final int ACTUATOR = 46;
+    }
+
+    public static final class C_FIELD_POSITIONS {
+        
+        public static final double FIRST_BALL_X = (300.05 * 0.0254) ;
+        public static final double SECOND_BALL_X = (107.68 * 0.0254);
+        public static final double THIRD_BALL_X = (201.75 * 0.0254);
+        public static final double FOURTH_BALL_X = (201.3 * 0.0254);
+
+        public static final double FIRST_BALL_Y = (7.05 * 0.0254) ;
+        public static final double SECOND_BALL_Y = (16.5 * 0.0254) ;
+        public static final double THIRD_BALL_Y = (33.05 * 0.0254) ;
+        public static final double FOURTH_BALL_Y = (271.3 * 0.0254) ;
+        
+
     }
 }

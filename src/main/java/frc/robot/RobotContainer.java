@@ -136,7 +136,7 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                return new TestAuto(swerve);
+                return new TestAuto(swerve, intake, index, shooter);
                 // Command selected = chooser.getSelected();
                 // if (selected == null) {
                 //         return defaultAuto;
