@@ -21,26 +21,26 @@ public class Climber implements Subsystem{
 
   public Climber(int leftClimber, int rightClimber) {
     this.climberLeft = new CANSparkMax(leftClimber, MotorType.kBrushless);
-    this.climberLeft.setSmartCurrentLimit(40);
+    this.climberLeft.setSmartCurrentLimit(60);
     this.climberLeft.setInverted(false);
-    this.climberLeft.setIdleMode(IdleMode.kBrake);
+    this.climberLeft.setIdleMode(IdleMode.kCoast);
 
-    this.pidControllerClimberLeft = this.climberLeft.getPIDController();
-    this.pidControllerClimberLeft.setP(1e-4);
-    this.pidControllerClimberLeft.setFF(0.000195);
+    // this.pidControllerClimberLeft = this.climberLeft.getPIDController();
+    // this.pidControllerClimberLeft.setP(1e-4);
+    // this.pidControllerClimberLeft.setFF(0.000195);
 
-    this.EncoderClimberLeft = this.climberLeft.getEncoder();
+    // this.EncoderClimberLeft = this.climberLeft.getEncoder();
 
     this.climberRight = new CANSparkMax(rightClimber, MotorType.kBrushless);
-    this.climberRight.setSmartCurrentLimit(40);
-    this.climberRight.setInverted(false);
-    this.climberRight .setIdleMode(IdleMode.kBrake);
+    this.climberRight.setSmartCurrentLimit(60);
+    this.climberRight.setInverted(true);
+    this.climberRight .setIdleMode(IdleMode.kCoast);
 
-    this.pidControllerClimberRight = this.climberRight.getPIDController();
-    this.pidControllerClimberRight.setP(1e-4);
-    this.pidControllerClimberRight.setFF(0.000195);
+    // this.pidControllerClimberRight = this.climberRight.getPIDController();
+    // this.pidControllerClimberRight.setP(1e-4);
+    // this.pidControllerClimberRight.setFF(0.000195);
 
-    this.EncoderClimberRight = this.climberRight.getEncoder();
+    // this.EncoderClimberRight = this.climberRight.getEncoder();
   }
 
   public void climber(double leftSpeed, double rightSpeed) {

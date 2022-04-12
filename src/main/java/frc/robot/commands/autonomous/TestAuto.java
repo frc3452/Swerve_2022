@@ -39,7 +39,7 @@ public class TestAuto extends SequentialCommandGroup {
     // var shoot_2 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter));
 
     ///addCommands(move_to_position);
-    addCommands(move_to_ball_1, shoot_1, ); 
+    addCommands(move_to_ball_1, shoot_1); 
     
     //, move_to_ball_2, shoot, move_to_ball_3, shoot, move_to_ball_4, shoot);
   }
