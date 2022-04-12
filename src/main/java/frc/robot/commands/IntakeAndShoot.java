@@ -5,6 +5,8 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.UpperIndex;
@@ -28,7 +30,7 @@ public class IntakeAndShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+   // System.out.println("nah");
   }
 
   
@@ -36,9 +38,16 @@ public class IntakeAndShoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+   
+    var i = new IntakeCommand(intake, true);
+    var s = new ShooterCommand(shooter, true, true);
+    var u = new UpperIndexCommand(index, true);
 
-    new IntakeCommand(intake, true);
-
+    //var deadline = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeCommand(intake, true).execute() );
+    u.execute();
+    i.execute();
+    s.execute();
 
   }
 

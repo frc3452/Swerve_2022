@@ -8,8 +8,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
+import frc.robot.Constants.C_FIELD_POSITIONS;
 import frc.robot.commands.IntakeAndShoot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveToPosition;
@@ -26,11 +31,16 @@ public class TestAuto extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0.0)))));
-   // var move_to_position = new MoveToPosition(swerve, new Pose2d(new Translation2d(16.0,8.0), new Rotation2d(0.0)));
-    var shoot = new IntakeAndShoot(intake, index, shooter);
+    var move_to_ball_1 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FIRST_BALL_X,C_FIELD_POSITIONS.FIRST_BALL_Y), new Rotation2d(0.0)));
+    var move_to_ball_2 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.SECOND_BALL_X,C_FIELD_POSITIONS.SECOND_BALL_Y), new Rotation2d(0.0)));
+    var move_to_ball_3 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.THIRD_BALL_X,C_FIELD_POSITIONS.THIRD_BALL_Y), new Rotation2d(0.0)));
+    var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
+    var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter));
+    // var shoot_2 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter));
 
     ///addCommands(move_to_position);
-
-    addCommands(shoot);
+    addCommands(move_to_ball_1, shoot_1, ); 
+    
+    //, move_to_ball_2, shoot, move_to_ball_3, shoot, move_to_ball_4, shoot);
   }
 }
