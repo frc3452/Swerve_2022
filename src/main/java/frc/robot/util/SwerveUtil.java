@@ -14,6 +14,10 @@ public class SwerveUtil {
         return angleOptimized;
     }
 
+    // public static Rotation2d autonOptimisation(Rotation2d current, Rotation2d target) {
+
+    // }
+
     public static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
         double lowerBound;
         double upperBound;
