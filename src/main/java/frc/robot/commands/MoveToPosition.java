@@ -32,9 +32,13 @@ public class MoveToPosition extends CommandBase {
   public MoveToPosition(SwerveDrive swerve, Pose2d target) {
     this.swerve = swerve;
     this.target = target;
-    pidXY = new PIDController(5.0, 0.0, 0.0);
+    pidXY = new PIDController(1.75, 0.0, 0.0);
     pidOmega = new PIDController(0.0, 0.0, 0.0);
     addRequirements(swerve);
+  }
+
+  public MoveToPosition(SwerveDrive swerve, Translation2d translation2d, Rotation2d rotation2d) {
+    this.swerve = swerve;
   }
 
   // Called when the command is initially scheduled.
@@ -63,11 +67,6 @@ public class MoveToPosition extends CommandBase {
 
     swerve.drive(new ChassisSpeeds(outputX, outputY, outputOmega), true);
   }
-
-  
-  //public void periodic() {
-    
-  //}
 
   // Called once the command ends or is interrupted.
   @Override

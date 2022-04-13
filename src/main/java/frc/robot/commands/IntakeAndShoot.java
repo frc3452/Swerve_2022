@@ -40,15 +40,15 @@ public class IntakeAndShoot extends CommandBase {
   public void execute() {
     
    
-    var i = new IntakeCommand(intake, true);
-    var s = new ShooterCommand(shooter, true, true);
+    // var i = new IntakeCommand(intake, true);
     var u = new UpperIndexCommand(index, true);
+    var s = new ShooterCommand(shooter, true, true);
 
-    //var deadline = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeCommand(intake, true).execute() );
-    u.execute();
-    i.execute();
-    s.execute();
-
+        s.execute();
+        new WaitCommand(0.5);
+        u.execute();
+    // i.execute();
+    new WaitCommand(1.0);
   }
 
   // Called once the command ends or is interrupted.
@@ -58,6 +58,6 @@ public class IntakeAndShoot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
