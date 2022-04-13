@@ -38,9 +38,9 @@ public class TestAuto extends SequentialCommandGroup {
     // var move_to_ball_3 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.THIRD_BALL_X,C_FIELD_POSITIONS.THIRD_BALL_Y), new Rotation2d(0.0)));
     // var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
     // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
-    var setZero = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(11,4), new Rotation2d(0))));
+    var setZero = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(8.2,6), new Rotation2d(0))));
     var shoot = new ParallelDeadlineGroup(new IntakeAndShoot(intake, index, shooter));
-    var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(11, 7)), new Rotation2d(0.0)));
+    var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(8.2, 7.15)), new Rotation2d(0.0)));
     ///addCommands(move_to_position);
     addCommands(setZero, Backup, shoot);  
     
