@@ -40,14 +40,15 @@ public class IntakeAndShoot extends CommandBase {
   public void execute() {
     
    
-    // var i = new IntakeCommand(intake, true);
+     var i = new IntakeCommand(intake, true);
     var u = new UpperIndexCommand(index, true);
     var s = new ShooterCommand(shooter, true, true);
-      new WaitCommand(3).raceWith(s.alongWith(wait(1000) andThen(u.execute())));
-     //   s.execute();
-       // new WaitCommand(1.25);
-       // u.execute();
-    // i.execute();
+      //new WaitCommand(1).raceWith(new ShooterCommand(shooter, true, true).alongWith(new WaitCommand(1).andThen(new UpperIndexCommand(index, true))));
+        s.execute();
+        
+      // Wait(3);
+        u.execute();
+     i.execute();
    //  new WaitCommand(1.0);
   }
 
