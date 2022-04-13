@@ -43,12 +43,12 @@ public class IntakeAndShoot extends CommandBase {
     // var i = new IntakeCommand(intake, true);
     var u = new UpperIndexCommand(index, true);
     var s = new ShooterCommand(shooter, true, true);
-
-        s.execute();
-        new WaitCommand(1.25);
-        u.execute();
+      new WaitCommand(3).raceWith(s.alongWith(wait(1) andThen(u.execute())));
+     //   s.execute();
+       // new WaitCommand(1.25);
+       // u.execute();
     // i.execute();
-    new WaitCommand(1.0);
+   //  new WaitCommand(1.0);
   }
 
   // Called once the command ends or is interrupted.
