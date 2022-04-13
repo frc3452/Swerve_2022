@@ -32,7 +32,7 @@ public class MoveToPosition extends CommandBase {
   public MoveToPosition(SwerveDrive swerve, Pose2d target) {
     this.swerve = swerve;
     this.target = target;
-    pidXY = new PIDController(1.75, 0.0, 0.0);
+    pidXY = new PIDController(2.0, 0.0, 0.0);
     pidOmega = new PIDController(0.0, 0.0, 0.0);
     addRequirements(swerve);
   }
