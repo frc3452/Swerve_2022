@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
@@ -23,6 +24,8 @@ public class Shooter extends SubsystemBase {
   double backSpeed;
   private RelativeEncoder EncoderShooterFront;
   private RelativeEncoder EncoderShooterBack;
+  private Limelight limelight;
+  private double distance;
 
 
   /** Creates a new Shooter. */
@@ -58,16 +61,29 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot(boolean inverted) {
+    distance = limelight.calculateDistance();
+    System.out.println(distance);
+    System.out.println("I was here");
     if (!inverted){ 
-      frontSpeed = Preferences.getDouble("frontSpeed", 2000);
-      backSpeed = Preferences.getDouble("backSpeed", 2000);
+      frontSpeed = Preferences.getDouble("frontSpeed", 2337);
+      backSpeed = Preferences.getDouble("backSpeed", 2714);
     } else {
-      frontSpeed = Preferences.getDouble("frontSpeed", 2000)*-1;
-      backSpeed = Preferences.getDouble("backSpeed", 2000)*-1;
+      frontSpeed = Preferences.getDouble("frontSpeed", 2337)*-1;
+      backSpeed = Preferences.getDouble("backSpeed", 2714)*-1;
     }
     this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
     this.pidControllerShooterBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
   }
+
+  public void lowShoot() {
+    lowshoot(false);
+  }
+  public void lowshoot(boolean inverted) {
+    frontSpeed = Preferences.getDouble("frontSpeed", 2337);
+    this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
+  }
+
+
 
   public void stop() {
     this.shooterFront.set(0);

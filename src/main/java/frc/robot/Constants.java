@@ -71,6 +71,12 @@ public final class Constants {
         public static final int ACTUATOR = 46;
     }
 
+    public static final class C_Limelight {
+        public static final double MOUNT_ANGLE = 0.0;
+        public static final double GOAL_HEIGHT = 0.0;
+        public static final double DISTANCE_FROM_FLOOR =0.0;
+    }
+
     public static final class C_FIELD_POSITIONS {
         
         public static final double FIRST_BALL_X = (7.64);

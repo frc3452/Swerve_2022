@@ -17,7 +17,6 @@ public class MoveToPosition extends CommandBase {
   private PIDController pidXY;
   private PIDController pidOmega;
 
-  /** Creates a new MoveToPosition. */
   private SwerveDrive swerve;
   private Pose2d current;
   private Pose2d target;
@@ -35,10 +34,6 @@ public class MoveToPosition extends CommandBase {
     pidXY = new PIDController(2.0, 0.0, 0.0);
     pidOmega = new PIDController(0.0, 0.0, 0.0);
     addRequirements(swerve);
-  }
-
-  public MoveToPosition(SwerveDrive swerve, Translation2d translation2d, Rotation2d rotation2d) {
-    this.swerve = swerve;
   }
 
   // Called when the command is initially scheduled.

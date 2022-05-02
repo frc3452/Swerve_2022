@@ -16,19 +16,20 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.C_FIELD_POSITIONS;
-import frc.robot.commands.IntakeAndShoot;
+import frc.robot.commands.IntakeAndLowShoot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveToPosition;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.LowShooterCommand;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.subsystems.*;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TestAuto extends SequentialCommandGroup {
+public class Red3Auto extends SequentialCommandGroup {
 
-  public TestAuto(SwerveDrive swerve, Intake intake, UpperIndex index, Shooter shooter) {
+  public Red3Auto(SwerveDrive swerve, Intake intake, UpperIndex index, Shooter shooter) {
     // Add your commands in the addCommands() call, e.g.
     //  addCommands(new FooCommand(), new BarCommand());
    // SmartDashboard.putString("autonomous", "IamRunning");
@@ -39,12 +40,13 @@ public class TestAuto extends SequentialCommandGroup {
     // var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
     // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
     var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(8.2,6), new Rotation2d(0))));
-    var shooting = new ShooterCommand(shooter, true);
-    var indexer = new IntakeAndShoot(intake, index);
+    var shooting = new InstantCommand(() ->new LowShooterCommand(shooter, true, true));
+    var indexer = new ParallelDeadlineGroup(new IntakeAndLowShoot(intake, index, shooter));
     var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(8.2,7.2)), new Rotation2d(0)));
     ///addCommands(move_to_position);
-    addCommands(setStart, Backup, 
-    new ParallelCommandGroup(shooting.withTimeout(6), new SequentialCommandGroup(new WaitCommand(2), indexer.withTimeout(4))));
+    addCommands(setStart, indexer);  
+    
     //, move_to_ball_2, shoot, move_to_ball_3, shoot, move_to_ball_4, shoot);
   }
+  
 }

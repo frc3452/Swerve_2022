@@ -11,22 +11,20 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.UpperIndex;
 
-public class IntakeAndShoot extends CommandBase {
+public class IntakeAndLowShoot extends CommandBase {
 
   private Intake intake;
   private UpperIndex index;
   private Shooter shooter;
   private boolean direction;
-  IntakeCommand i;
-  UpperIndexCommand u;
 
   /** Creates a new IntakeAndShoot. */
-  public IntakeAndShoot(Intake intake, UpperIndex index) {
+  public IntakeAndLowShoot(Intake intake, UpperIndex index, Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
     this.index = index;
-    //this.shooter = shooter;
-    addRequirements(intake);
+    this.shooter = shooter;
+    addRequirements(intake, shooter);
   }
 
   // Called when the command is initially scheduled.
@@ -42,23 +40,26 @@ public class IntakeAndShoot extends CommandBase {
   public void execute() {
     
    
-    i = new IntakeCommand(intake, true);
-    u = new UpperIndexCommand(index, true);
-
-    u.execute();
-    i.execute();
+     var i = new IntakeCommand(intake, true);
+    var u = new UpperIndexCommand(index, true);
+    var s = new LowShooterCommand(shooter, true, true);
+      //new WaitCommand(1).raceWith(new ShooterCommand(shooter, true, true).alongWith(new WaitCommand(1).andThen(new UpperIndexCommand(index, true))));
+        s.execute();
+        
+      // Wait(3);
+        u.execute();
+     i.execute();
+   //  new WaitCommand(1.0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    u.end(true);
-    i.end(true);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+  
+    return true;
   }
 }

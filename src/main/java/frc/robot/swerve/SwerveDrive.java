@@ -30,6 +30,7 @@ public class SwerveDrive implements Subsystem {
     private final List<WheelDrive> modules;
 
     private final AHRS gyro;
+    // private double offset = 180;
     private Rotation2d gyroAngle;
 
     private final SwerveDriveKinematics kinematics;
@@ -69,7 +70,7 @@ public class SwerveDrive implements Subsystem {
     }
 
     private final Rotation2d getgyroangle() {
-        return Rotation2d.fromDegrees(-gyro.getAngle());
+        return Rotation2d.fromDegrees(-(gyro.getAngle()/*+offset*/));
     }
 
     @Override

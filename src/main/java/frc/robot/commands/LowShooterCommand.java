@@ -7,24 +7,16 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
-public class ShooterCommand extends CommandBase {
+public class LowShooterCommand extends CommandBase {
 
   private final Shooter shooter;
   // private final boolean stop;
   private boolean direction;
-  private boolean lowGoal;
 
-  public ShooterCommand(Shooter shooter, boolean direction) {
+  public LowShooterCommand(Shooter shooter, boolean stop, boolean direction) {
     this.shooter = shooter;
+    // this.stop = stop;
     this.direction = direction;
-    this.lowGoal = false;
-    addRequirements(shooter);
-  }
-
-  public ShooterCommand(Shooter shooter, boolean direction, boolean lowGoal) {
-    this.shooter = shooter;
-    this.direction = direction;
-    this.lowGoal = lowGoal;
     addRequirements(shooter);
   }
 
@@ -33,11 +25,7 @@ public class ShooterCommand extends CommandBase {
   }
 
   public void execute() {
-    if (lowGoal == false) {
-      shooter.shoot(!direction);
-    }  else {
-      shooter.lowShoot();
-    }
+    shooter.lowshoot(!direction);
   }
 
   @Override

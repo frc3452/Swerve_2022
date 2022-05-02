@@ -20,31 +20,22 @@ import frc.robot.commands.IntakeAndShoot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveToPosition;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.LowShooterCommand;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.subsystems.*;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TestAuto extends SequentialCommandGroup {
+public class Red2Auto extends SequentialCommandGroup {
 
-  public TestAuto(SwerveDrive swerve, Intake intake, UpperIndex index, Shooter shooter) {
-    // Add your commands in the addCommands() call, e.g.
-    //  addCommands(new FooCommand(), new BarCommand());
-   // SmartDashboard.putString("autonomous", "IamRunning");
-   // addCommands(new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0.0,0.0), new Rotation2d(0)))));
-    // var move_to_ball_1 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FIRST_BALL_X,C_FIELD_POSITIONS.FIRST_BALL_Y), new Rotation2d(-3.1415/2)));
-    // var move_to_ball_2 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.SECOND_BALL_X,C_FIELD_POSITIONS.SECOND_BALL_Y), new Rotation2d(0.0)));
-    // var move_to_ball_3 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.THIRD_BALL_X,C_FIELD_POSITIONS.THIRD_BALL_Y), new Rotation2d(0.0)));
-    // var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
-    // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
-    var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(8.2,6), new Rotation2d(0))));
+  public Red2Auto(SwerveDrive swerve, Intake intake, UpperIndex index, Shooter shooter) {
+    var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(/*10.2,4*/7.8,4), new Rotation2d(0))));
     var shooting = new ShooterCommand(shooter, true);
     var indexer = new IntakeAndShoot(intake, index);
-    var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(8.2,7.2)), new Rotation2d(0)));
+    var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(/*11.4,4*/6.6,4)), new Rotation2d(0)));
     ///addCommands(move_to_position);
     addCommands(setStart, Backup, 
     new ParallelCommandGroup(shooting.withTimeout(6), new SequentialCommandGroup(new WaitCommand(2), indexer.withTimeout(4))));
-    //, move_to_ball_2, shoot, move_to_ball_3, shoot, move_to_ball_4, shoot);
   }
 }
