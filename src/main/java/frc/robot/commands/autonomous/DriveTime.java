@@ -7,22 +7,20 @@ import frc.robot.swerve.SwerveDrive;
 
 public class DriveTime extends SequentialCommandGroup {
 
-    public DriveTime(SwerveDrive swerve, ChassisSpeeds speed, boolean fieldRelative, double time) {
+    public DriveTime(SwerveDrive swerve, ChassisSpeeds speed, double time) {
         addCommands(
-                new DriveSwerveIndefintely(swerve, speed, fieldRelative).withTimeout(time));
+                new DriveSwerveIndefintely(swerve, speed).withTimeout(time));
     }
 
     private class DriveSwerveIndefintely extends CommandBase {
 
         private final SwerveDrive swerve;
         private final ChassisSpeeds speed;
-        private final boolean fieldRelative;
 
 
-        public DriveSwerveIndefintely(SwerveDrive swerve, ChassisSpeeds speed, boolean fieldRelative) {
+        public DriveSwerveIndefintely(SwerveDrive swerve, ChassisSpeeds speed) {
             this.swerve = swerve;
             this.speed = speed;
-            this.fieldRelative = fieldRelative;
             addRequirements(swerve);
         }
 
@@ -32,7 +30,7 @@ public class DriveTime extends SequentialCommandGroup {
 
         @Override
         public void execute() {
-            swerve.drive(speed, fieldRelative);
+            swerve.drive(speed, false);
         }
 
         @Override

@@ -12,32 +12,21 @@ public class ShooterCommand extends CommandBase {
   private final Shooter shooter;
   // private final boolean stop;
   private boolean direction;
-  private boolean lowGoal;
 
   public ShooterCommand(Shooter shooter, boolean direction) {
     this.shooter = shooter;
     this.direction = direction;
-    this.lowGoal = false;
     addRequirements(shooter);
   }
 
-  public ShooterCommand(Shooter shooter, boolean direction, boolean lowGoal) {
-    this.shooter = shooter;
-    this.direction = direction;
-    this.lowGoal = lowGoal;
-    addRequirements(shooter);
-  }
+  
 
   @Override
   public void initialize() {
   }
 
   public void execute() {
-    if (lowGoal == false) {
-      shooter.shoot(!direction);
-    }  else {
-      shooter.lowShoot();
-    }
+    shooter.shoot(!direction);
   }
 
   @Override

@@ -31,6 +31,10 @@ public class SwerveDriveCommand extends CommandBase {
         addRequirements(swerve);
     }
 
+    // public SwerveDriveCommand(SwerveDrive swerve) {
+    //     this.swerve = swerve;
+    // }
+
     @Override
 
     public void initialize() {

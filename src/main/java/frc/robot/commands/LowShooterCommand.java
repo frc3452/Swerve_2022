@@ -13,7 +13,7 @@ public class LowShooterCommand extends CommandBase {
   // private final boolean stop;
   private boolean direction;
 
-  public LowShooterCommand(Shooter shooter, boolean stop, boolean direction) {
+  public LowShooterCommand(Shooter shooter, boolean direction) {
     this.shooter = shooter;
     // this.stop = stop;
     this.direction = direction;

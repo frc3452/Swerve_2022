@@ -12,18 +12,18 @@ import frc.robot.subsystems.UpperIndex;
 public class BackandShoot extends SequentialCommandGroup {
 
     public BackandShoot(SwerveDrive swerve, UpperIndex index, Shooter shoot) {
-//        var shoot_command = new ShooterCommand(shoot, false).withTimeout(2.5)
-//                .andThen(
-//                        new ParallelDeadlineGroup(new WaitCommand(2),
-//                                new ShooterCommand(shoot, true),
-//                                new UpperIndexCommand(index, true)));
-//
+       var shoot_command = new ShooterCommand(shoot, false).withTimeout(2.5)
+               .andThen(
+                       new ParallelDeadlineGroup(new WaitCommand(2),
+                               new ShooterCommand(shoot, true),
+                               new UpperIndexCommand(index, true)));
+
 //        var drive_command = new DriveTime(swerve, -0.25, 0, 0, 2.5);
-//
-//        addCommands(
-//                drive_command,
-//                new WaitCommand(0.25),
-//                shoot_command);
+
+       addCommands(
+        //        drive_command,
+               new WaitCommand(0.25),
+               shoot_command);
     }
 
 }

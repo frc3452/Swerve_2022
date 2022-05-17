@@ -38,13 +38,20 @@ public class TestAuto extends SequentialCommandGroup {
     // var move_to_ball_3 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.THIRD_BALL_X,C_FIELD_POSITIONS.THIRD_BALL_Y), new Rotation2d(0.0)));
     // var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
     // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
-    var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(8.2,6), new Rotation2d(0))));
+    var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0,0), new Rotation2d(-1.57))));
     var shooting = new ShooterCommand(shooter, true);
+    var shooting2 = new ShooterCommand(shooter, true);
+    var shooting3 = new ShooterCommand(shooter, true);
+    var indexer2 = new IntakeAndShoot(intake, index);
     var indexer = new IntakeAndShoot(intake, index);
-    var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(8.2,7.2)), new Rotation2d(0)));
-    ///addCommands(move_to_position);
-    addCommands(setStart, Backup, 
-    new ParallelCommandGroup(shooting.withTimeout(6), new SequentialCommandGroup(new WaitCommand(2), indexer.withTimeout(4))));
+    
+    var move = new MoveToPosition(swerve, new Pose2d((new Translation2d(0.0,-1.0)), new Rotation2d(-1.57)));
+    var setWaypoint1 = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0.0,-1.0), new Rotation2d(-1.57))));
+    var rotate = new MoveToPosition(swerve, new Pose2d((new Translation2d(0.0,-1.0)), new Rotation2d(-3.14)));
+
+    addCommands(setStart,move.raceWith(indexer /*shooting*/),setWaypoint1, new WaitCommand(3), rotate,new WaitCommand(4).alongWith(new WaitCommand(4).raceWith(shooting2)/*, new WaitCommand(1).andThen(new WaitCommand(3).raceWith(indexer2, shooting3))*/));
+    // shooting, rotate));
+    // new ParallelCommandGroup(shooting.withTimeout(6), new SequentialCommandGroup(new WaitCommand(2), indexer.withTimeout(4))));
     //, move_to_ball_2, shoot, move_to_ball_3, shoot, move_to_ball_4, shoot);
   }
 }

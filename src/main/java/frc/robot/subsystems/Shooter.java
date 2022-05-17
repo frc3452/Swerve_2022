@@ -61,15 +61,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot(boolean inverted) {
-    distance = limelight.calculateDistance();
-    System.out.println(distance);
-    System.out.println("I was here");
+    // distance = limelight.calculateDistance();
+    // System.out.println(distance);
+    // System.out.println("I was here");
     if (!inverted){ 
-      frontSpeed = Preferences.getDouble("frontSpeed", 2337);
-      backSpeed = Preferences.getDouble("backSpeed", 2714);
+      frontSpeed = Preferences.getDouble("frontSpeed", 2337.0);
+      backSpeed = Preferences.getDouble("backSpeed", 2714.0);
     } else {
-      frontSpeed = Preferences.getDouble("frontSpeed", 2337)*-1;
-      backSpeed = Preferences.getDouble("backSpeed", 2714)*-1;
+      frontSpeed = Preferences.getDouble("frontSpeed", 2337.0)*-1;
+      backSpeed = Preferences.getDouble("backSpeed", 2714.0)*-1;
     }
     this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
     this.pidControllerShooterBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);

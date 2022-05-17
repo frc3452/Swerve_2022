@@ -70,7 +70,7 @@ public class SwerveDrive implements Subsystem {
     }
 
     private final Rotation2d getgyroangle() {
-        return Rotation2d.fromDegrees(-(gyro.getAngle()/*+offset*/));
+        return Rotation2d.fromDegrees(-(gyro.getAngle()));
     }
 
     @Override

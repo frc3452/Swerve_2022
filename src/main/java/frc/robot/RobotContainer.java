@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -15,12 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
-import frc.robot.commands.autonomous.BackandShoot;
-import frc.robot.commands.autonomous.Backup;
-import frc.robot.commands.autonomous.TestAuto;
-import frc.robot.commands.autonomous.Red1Auto;
-import frc.robot.commands.autonomous.Red2Auto;
-import frc.robot.commands.autonomous.Red3Auto;
+import frc.robot.commands.autonomous.*;
 // import frc.robot.commands.autonomous.LowBackup;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -35,7 +31,7 @@ public class RobotContainer {
         private final XboxController joystickDrive = new XboxController(0);
         private final XboxController joystickControl = new XboxController(1);
 
-        private boolean fieldRelative = true;
+        public boolean fieldRelative = true;
         private boolean constantIntake = false;
         private boolean presetShootetr = false;
 
@@ -97,7 +93,7 @@ public class RobotContainer {
                                 .whileHeld(new UpperIndexCommand(index, true));
 
                 new JoystickButton(joystickControl, Button.kX.value)
-                                .whileHeld(new ShooterCommand(shooter, true, false));
+                                .whileHeld(new ShooterCommand(shooter, true));
 
                 new JoystickButton(joystickDrive, Button.kStart.value)
                                 .whenPressed(new InstantCommand(() -> fieldRelative = !fieldRelative));
@@ -116,9 +112,11 @@ public class RobotContainer {
 
                 chooser.setDefaultOption("Shoot", defaultAuto);
 
-                chooser.addOption("BackandShoot", new TestAuto(swerve, intake, index, shooter));
+                chooser.addOption("test", new TestAuto(swerve, intake, index, shooter));
                 chooser.addOption("Shoot 2 Shoot", new Red2Auto(swerve, intake, index, shooter));
                 chooser.addOption("Low Shoot", new Red3Auto(swerve, intake, index, shooter));
+                chooser.addOption("Time", new DriveTime(swerve, new ChassisSpeeds(0.0, 5, 0), 2));
+
                 // chooser.addOption("Low Shoot Backup", new LowBackup(swerve, intake, index, shooter));
                 // chooser.addOption("Back Up", new Backup(swerve));
                 // chooser.addOption("ShootandBackUp", new ExampleAuto(swerve, index, shooter));

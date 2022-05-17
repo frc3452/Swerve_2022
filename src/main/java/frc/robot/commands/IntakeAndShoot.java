@@ -45,14 +45,13 @@ public class IntakeAndShoot extends CommandBase {
     i = new IntakeCommand(intake, true);
     u = new UpperIndexCommand(index, true);
 
-    u.execute();
     i.execute();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    u.end(true);
+    
     i.end(true);
   }
 

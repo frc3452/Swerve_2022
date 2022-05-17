@@ -40,7 +40,7 @@ public class Red1Auto extends SequentialCommandGroup {
     // var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
     // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
     var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(8.2,6), new Rotation2d(0))));
-    var shooting = new InstantCommand(() ->new LowShooterCommand(shooter, true, true));
+    // var shooting = new InstantCommand(() ->new LowShooterCommand(shooter, true, true));
     var indexer = new ParallelDeadlineGroup(new IntakeAndShoot(intake, index));
     var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(8.2,7.2)), new Rotation2d(0)));
     ///addCommands(move_to_position);
