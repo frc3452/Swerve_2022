@@ -46,6 +46,7 @@ public class IntakeAndShoot extends CommandBase {
     u = new UpperIndexCommand(index, true);
 
     i.execute();
+    u.execute();
   }
 
   // Called once the command ends or is interrupted.
@@ -53,6 +54,7 @@ public class IntakeAndShoot extends CommandBase {
   public void end(boolean interrupted) {
     
     i.end(true);
+    u.end(true);
   }
 
   // Returns true when the command should end.

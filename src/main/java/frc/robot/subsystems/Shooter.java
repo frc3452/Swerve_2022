@@ -57,9 +57,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot() {
-    shoot(false);
+    this.shoot(false);
   }
-
   public void shoot(boolean inverted) {
     // distance = limelight.calculateDistance();
     // System.out.println(distance);
@@ -70,6 +69,21 @@ public class Shooter extends SubsystemBase {
     } else {
       frontSpeed = Preferences.getDouble("frontSpeed", 2337.0)*-1;
       backSpeed = Preferences.getDouble("backSpeed", 2714.0)*-1;
+    }
+    this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
+    this.pidControllerShooterBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
+  }
+
+  public void shoot(double frontSpeed, double backSpeed) {
+    this.shoot(frontSpeed, backSpeed, false);
+  }
+  public void shoot(double frontSpeed, double backSpeed,boolean inverted) {
+    if (!inverted){ 
+      frontSpeed = frontSpeed;
+      backSpeed = backSpeed;
+    } else {
+      frontSpeed = frontSpeed*-1;
+      backSpeed = backSpeed*-1;
     }
     this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
     this.pidControllerShooterBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);

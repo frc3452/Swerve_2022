@@ -21,6 +21,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveToPosition;
 import frc.robot.commands.ShooterCommand;
 import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.commands.UpperIndexCommand;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.subsystems.*;
 
@@ -40,18 +41,18 @@ public class TestAuto extends SequentialCommandGroup {
     // var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
     // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
     var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0,0), new Rotation2d(-1.57))));
+    
     var stop1 = new InstantCommand(() -> swerve.stop());
     var stop2 = new InstantCommand(() -> swerve.stop());
-    var stop3 = new InstantCommand(() -> swerve.stop());
-    var shooting = new ShooterCommand(shooter, true);
-    var shooting2 = new ShooterCommand(shooter, true);
-    var shooting3 = new ShooterCommand(shooter, true);
-    var indexer = new IntakeAndShoot(intake, index);
     
+    var intake1 = new IntakeCommand(intake, true);
+    var indexer = new IntakeAndShoot(intake, index);
+    var shooting = new ShooterCommand(shooter, true, 4000.0, 4000.0);
+
     var move1 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-0.9,-1.3)), new Rotation2d(-1.57)));
-    var move2 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-0.9,-1.3)), new Rotation2d(-3.14)));
-    var move3 = new MoveToPosition(swerve, new Pose2d((new Translation2d(0.0,0.0)), new Rotation2d(0)));
-    addCommands(setStart, move1.raceWith(indexer.withTimeout(10)), stop1, move2.alongWith(shooting.withTimeout(5), new WaitCommand(2)));
+    var move2 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-0.1,-1.2)), new Rotation2d(-3.1)));
+    
+    addCommands(setStart, move1.raceWith(intake1.withTimeout(6)), stop1, new ParallelCommandGroup(move2.andThen(stop2), shooting.withTimeout(4), new WaitCommand(2).andThen(indexer.withTimeout(2))));
 
     // , new WaitCommand(10), rotate.raceWith(shooting));
     // addCommands(setStart,move.raceWith(indexer /*shooting*/), new WaitCommand(3), rotate,new WaitCommand(4).alongWith(new WaitCommand(4).raceWith(shooting2)/*, new WaitCommand(1).andThen(new WaitCommand(3).raceWith(indexer2, shooting3))*/));

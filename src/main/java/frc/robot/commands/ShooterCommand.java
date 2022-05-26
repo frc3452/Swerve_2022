@@ -13,12 +13,26 @@ public class ShooterCommand extends CommandBase {
   // private final boolean stop;
   private boolean direction;
   private boolean stop;
-  
+
+  private double frontSpeed;
+  private double backSpeed;
+
   public ShooterCommand(Shooter shooter, boolean direction) {
     this.shooter = shooter;
     this.direction = direction;
     addRequirements(shooter);
     this.stop = false;
+    this.frontSpeed = 0;
+    this.backSpeed = 0;
+  }
+
+  public ShooterCommand(Shooter shooter, boolean direction, double frontSpeed, double backSpeed) {
+    this.shooter = shooter;
+    this.direction = direction;
+    addRequirements(shooter);
+    this.stop = false;
+    this.frontSpeed = frontSpeed;
+    this.backSpeed = backSpeed;
   }
 
   public ShooterCommand(Shooter shooter, boolean direction, boolean stop) {
@@ -26,6 +40,8 @@ public class ShooterCommand extends CommandBase {
     this.direction = direction;
     addRequirements(shooter);
     this.stop = stop;
+    this.frontSpeed = 0;
+    this.backSpeed = 0;
   }
 
 
@@ -35,7 +51,11 @@ public class ShooterCommand extends CommandBase {
 
   public void execute() {
     if (!stop){
-    shooter.shoot(!direction);
+      // if (frontSpeed != 0 && backSpeed != 0) {
+        shooter.shoot(!direction);
+      // } else {
+      //   shooter.shoot(frontSpeed, backSpeed);
+      // }
     } else {
       shooter.stop();
     }
