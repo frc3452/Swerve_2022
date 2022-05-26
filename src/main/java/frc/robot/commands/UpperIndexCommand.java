@@ -10,11 +10,20 @@ import frc.robot.subsystems.UpperIndex;
 public class UpperIndexCommand extends CommandBase {
   private final UpperIndex index;
   private boolean direction;
+  private final boolean stop;
 
   public UpperIndexCommand(UpperIndex index, boolean direction) {
     this.index = index;
     this.direction = direction;
     addRequirements(index);
+    this.stop = false;
+  }
+
+  public UpperIndexCommand(UpperIndex index, boolean direction, boolean stop) {
+    this.index = index;
+    this.direction = direction;
+    addRequirements(index);
+    this.stop = stop;
   }
 
   // Called when the command is initially scheduled.

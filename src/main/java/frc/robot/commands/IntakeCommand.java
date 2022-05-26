@@ -12,25 +12,38 @@ import frc.robot.subsystems.Intake;
 public class IntakeCommand extends CommandBase {
   private final Intake intake;
   private boolean direction;
+  private boolean stop;
 
   public IntakeCommand(Intake intake, boolean direction) {
     this.intake = intake;
     this.direction = direction;
     addRequirements(intake);
+    this.stop = false;
+  }
+
+  public IntakeCommand(Intake intake, boolean direction, boolean stop) {
+    this.intake = intake;
+    this.direction = direction;
+    addRequirements(intake);
+    this.stop = stop;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
-    if(!direction){
-      intake.intake(0.5, 0.75);
-    }else{
-      intake.intake(-0.5, -0.75);
+    if (!stop) {
+      if (!direction) {
+        intake.intake(0.5, 0.75);
+      } else {
+        intake.intake(-0.5, -0.75);
+      }
+    } else {
+      intake.stop();
     }
-  
   }
 
   @Override
