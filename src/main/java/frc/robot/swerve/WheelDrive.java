@@ -33,7 +33,7 @@ public class WheelDrive {
     private final int modulePosition;
 
     private final TalonSRX azimuth;
-    private final CANSparkMax speedMotor;
+    public final CANSparkMax speedMotor;
     private SwerveModuleState currentState;
 
     private final SparkMaxPIDController drivePID;
@@ -78,6 +78,12 @@ public class WheelDrive {
         this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
         this.speedMotor.restoreFactoryDefaults();
         this.speedMotor.setInverted(false);
+
+
+        // if(this.modulePosition == 2) {
+        //     this.speedMotor.setInverted(true);
+        // }
+
         this.speedMotor.setSmartCurrentLimit(40);
         this.speedMotor.setIdleMode(IdleMode.kBrake);
 

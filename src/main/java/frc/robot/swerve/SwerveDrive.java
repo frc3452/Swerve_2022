@@ -50,6 +50,8 @@ public class SwerveDrive implements Subsystem {
                 Constants.C_SwerveModules.FRONT_LEFT_SPEED);
         gyro = new AHRS();
 
+        frontRight.speedMotor.setInverted(false);
+
         modules = List.of(backRight, backLeft, frontRight, frontLeft);
 
         var w = Units.inchesToMeters(Constants.ROBOT_WIDTH) / 2.0;
@@ -77,7 +79,7 @@ public class SwerveDrive implements Subsystem {
     public void periodic() {
         modules.forEach(WheelDrive::update);
         gyroAngle = getgyroangle();
-
+        
         SwerveModuleState[] states = modules.stream().map(WheelDrive::getCurrentState).toArray(SwerveModuleState[]::new);
         
         pose = odometry.update(gyroAngle,
