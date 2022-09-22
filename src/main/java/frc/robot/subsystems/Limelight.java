@@ -21,6 +21,7 @@ public class Limelight implements Subsystem {
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
 
+
     private boolean validTarget = false;
 
         public void UpdateTracking() {
@@ -67,5 +68,15 @@ public class Limelight implements Subsystem {
         UpdateTracking();
 
     }
+
+    public double getMode() {
+
+        double mode = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(21);
+
+        return mode;
+
+    }
+
+
 
 }

@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -59,7 +60,7 @@ public class RobotContainer {
 
 
 
-                // SmartDashboard.
+                // SmartDashboard <3.
                 SmartDashboard.putData("ZeroAzimuth", new ZeroAzimuthCommand(swerve));
 
                 climber.setDefaultCommand(new ClimberCommand(climber, joystickControl));
@@ -92,7 +93,7 @@ public class RobotContainer {
                 new JoystickButton(joystickDrive, Button.kRightBumper.value)
                                 .whileHeld(new UpperIndexCommand(index, true));
 
-                new JoystickButton(joystickControl, Button.kX.value)
+                new JoystickButton(joystickDrive, Button.kX.value)
                                 .whileHeld(new ShooterCommand(shooter, true));
 
                 new JoystickButton(joystickDrive, Button.kStart.value)
@@ -125,7 +126,7 @@ public class RobotContainer {
                 SmartDashboard.putData(chooser);
                 
                 Shuffleboard.getTab("swervy").addNumber("X", this::getOmega);
-                
+                //Shuffleboard.getTab("graphing").addNumber("Motor Controller 1", )
 
                 // new JoystickButton(joystick, Button.kB.value)
                 // .whileActiveOnce(new ZeroAzimuthCommand(swerve));
