@@ -37,12 +37,18 @@ public class Limelight implements Subsystem {
     public double calculateDistance() {
 
         double targetOffsetAngle_Vertical = ty.getDouble(0.0);
-        double angleToGoal = (C_Limelight.MOUNT_ANGLE + targetOffsetAngle_Vertical) * (Math.PI/180.0);
 
-        double distance = (C_Limelight.GOAL_HEIGHT - C_Limelight.DISTANCE_FROM_FLOOR) / Math.tan(angleToGoal);
+        double distance = 0.0;
+        if (targetOffsetAngle_Vertical != 0.0) {
+            double angleToGoal = (C_Limelight.MOUNT_ANGLE + targetOffsetAngle_Vertical) * (Math.PI/180.0);
 
-        return distance;
+            distance = (C_Limelight.GOAL_HEIGHT - C_Limelight.DISTANCE_FROM_FLOOR) / Math.tan(angleToGoal);
         
+        }else if(targetOffsetAngle_Vertical == 0.0) {
+            distance = 0.0;
+        }
+        
+        return distance;
 
     }
 
@@ -75,6 +81,10 @@ public class Limelight implements Subsystem {
 
         return mode;
 
+    }
+
+    public void setMode(double mode) {
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setDouble(mode);
     }
 
 

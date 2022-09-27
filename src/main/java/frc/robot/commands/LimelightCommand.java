@@ -7,27 +7,31 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
+import frc.robot.swerve.SwerveDrive;
 
 public class LimelightCommand extends CommandBase {
   private final Limelight limelight;
 
-  public LimelightCommand(Limelight limelight) {
+  public LimelightCommand(Limelight limelight, SwerveDrive swerve) {
     this.limelight = limelight;
-    addRequirements(limelight);
+    
+    addRequirements(limelight, swerve);
     
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (limelight.getMode() == 0) {
-      
-    }
+    if (limelight.getMode() == 1) {
+      limelight.setMode(3);
+    }else if (limelight.getMode() == 0 || limelight.getMode() == 3) {}
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double dist = limelight.calculateDistance();
     
   }
 
