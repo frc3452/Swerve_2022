@@ -69,10 +69,10 @@ public class RobotContainer {
                                                 () -> fieldRelative));
                 // new ShooterLogic(intake, index, shooter);
 
-                new JoystickButton(joystickControl, Button.kRightBumper.value)
+                new JoystickButton(joystickControl, Button.kRightBumper.value)//
                                 .whileHeld(new IntakeActuationCommand(actuator, false));
 
-                new JoystickButton(joystickControl, Button.kLeftBumper.value)
+                new JoystickButton(joystickControl, Button.kLeftBumper.value)//
                                 .whileHeld(new IntakeActuationCommand(actuator, true));
 
                 new JoystickButton(joystickDrive, Button.kLeftBumper.value)
@@ -93,8 +93,17 @@ public class RobotContainer {
                 new JoystickButton(joystickDrive, Button.kRightBumper.value)
                                 .whileHeld(new UpperIndexCommand(index, true));
 
+                new JoystickButton(joystickDrive, Button.kA.value)
+                                .whenPressed(new AutoTurn(swerve, 0));
+
+                new JoystickButton(joystickDrive, Button.kB.value)
+                                .whenPressed(new AutoTurn(swerve, 2));
+
                 new JoystickButton(joystickDrive, Button.kX.value)
-                                .whileHeld(new ShooterCommand(shooter, true));
+                                .whenPressed(new AutoTurn(swerve, 3));
+                
+                new JoystickButton(joystickDrive, Button.kY.value)
+                                .whenPressed(new AutoTurn(swerve, 1));
 
                 new JoystickButton(joystickDrive, Button.kStart.value)
                                 .whenPressed(new InstantCommand(() -> fieldRelative = !fieldRelative));
