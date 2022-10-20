@@ -122,7 +122,7 @@ public class RobotContainer {
 
                 chooser.setDefaultOption("Shoot", defaultAuto);
 
-                chooser.addOption("test", new TestAuto(swerve, intake, index, shooter));
+                chooser.addOption("PickTurnandShoot", new TestAuto(swerve, intake, index, shooter));
                 chooser.addOption("test2", new TestAuto2(swerve, intake, index, shooter));
                 chooser.addOption("Shoot 2 Shoot", new Red2Auto(swerve, intake, index, shooter));
                 chooser.addOption("Low Shoot", new Red3Auto(swerve, intake, index, shooter));
