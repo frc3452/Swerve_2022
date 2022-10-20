@@ -142,15 +142,15 @@ public class RobotContainer {
         }
 
         private double getX() {
-                return Util.deadband(-joystickDrive.getRawAxis(1) * (1 / 0.25));
+                return Util.deadband(joystickDrive.getRawAxis(1) * (1 / 0.25));
         }
 
         private double getY() {
-                return Util.deadband(-joystickDrive.getRawAxis(0) * (1 / 0.25));
+                return Util.deadband(joystickDrive.getRawAxis(0) * (1 / 0.25));
         }
 
         private double getOmega() {
-                return Util.deadband(-joystickDrive.getRawAxis(4)) * Units.degreesToRadians(360);
+                return Util.deadband(joystickDrive.getRawAxis(4)) * Units.degreesToRadians(360);
         }
 
         private boolean getDrive(Button button) {
