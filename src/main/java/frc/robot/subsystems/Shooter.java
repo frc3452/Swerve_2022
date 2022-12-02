@@ -64,11 +64,12 @@ public class Shooter extends SubsystemBase {
     // System.out.println(distance);
     // System.out.println("I was here");
     if (!inverted){ 
-      frontSpeed = Preferences.getDouble("frontSpeed", 2337.0);
-      backSpeed = Preferences.getDouble("backSpeed", 2714.0);
+      frontSpeed = Preferences.getDouble("frontSpeed", 2000.0); // 2337
+      backSpeed = Preferences.getDouble("backSpeed", 2500.0); // 2714
+      //Not speeds on Robot
     } else {
-      frontSpeed = Preferences.getDouble("frontSpeed", 2337.0)*-1;
-      backSpeed = Preferences.getDouble("backSpeed", 2714.0)*-1;
+      frontSpeed = Preferences.getDouble("frontSpeed", 2000.0)*-1; // 2337
+      backSpeed = Preferences.getDouble("backSpeed", 2500.0)*-1; //2714
     }
     this.pidControllerShooterFront.setReference(frontSpeed,CANSparkMax.ControlType.kVelocity);
     this.pidControllerShooterBack.setReference(backSpeed,CANSparkMax.ControlType.kVelocity);
