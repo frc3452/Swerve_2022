@@ -122,12 +122,11 @@ public class RobotContainer {
 
                 chooser.setDefaultOption("Shoot", defaultAuto);
 
-                chooser.addOption("PickTurnandShoot", new TestAuto(swerve, intake, index, shooter));
-                chooser.addOption("test2", new TestAuto2(swerve, intake, index, shooter));
-                chooser.addOption("Shoot 2 Shoot", new Red2Auto(swerve, intake, index, shooter));
-                chooser.addOption("Low Shoot", new Red3Auto(swerve, intake, index, shooter));
-                chooser.addOption("Time", new DriveTime(swerve, new ChassisSpeeds(0.0, 5, 0), 2));
-
+                chooser.addOption("TestAuto", new TestAuto(swerve, intake, index, shooter));
+                chooser.addOption("TestAuto2", new TestAuto2(swerve, intake, index, shooter));
+                chooser.addOption("RedAuto2", new Red2Auto(swerve, intake, index, shooter));
+                chooser.addOption("Red3Auto", new Red3Auto(swerve, intake, index, shooter));
+            
                 // chooser.addOption("Low Shoot Backup", new LowBackup(swerve, intake, index, shooter));
                 // chooser.addOption("Back Up", new Backup(swerve));
                 // chooser.addOption("ShootandBackUp", new ExampleAuto(swerve, index, shooter));
@@ -142,15 +141,15 @@ public class RobotContainer {
         }
 
         private double getX() {
-                return Util.deadband(joystickDrive.getRawAxis(1) * (1 / 0.25));
+                return Util.deadband(-joystickDrive.getRawAxis(1) * (1 / 0.25));
         }
 
         private double getY() {
-                return Util.deadband(joystickDrive.getRawAxis(0) * (1 / 0.25));
+                return Util.deadband(-joystickDrive.getRawAxis(0) * (1 / 0.25));
         }
 
         private double getOmega() {
-                return Util.deadband(joystickDrive.getRawAxis(4)) * Units.degreesToRadians(360);
+                return Util.deadband(-joystickDrive.getRawAxis(4)) * Units.degreesToRadians(360);
         }
 
         private boolean getDrive(Button button) {

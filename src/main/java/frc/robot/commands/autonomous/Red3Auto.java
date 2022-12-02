@@ -20,6 +20,7 @@ import frc.robot.commands.IntakeAndLowShoot;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.MoveToPosition;
 import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.UpperIndexCommand;
 import frc.robot.commands.LowShooterCommand;
 import frc.robot.swerve.SwerveDrive;
 import frc.robot.subsystems.*;
@@ -41,10 +42,12 @@ public class Red3Auto extends SequentialCommandGroup {
     // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
     var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(8.2,6), new Rotation2d(0))));
     // var shooting = new InstantCommand(() ->new LowShooterCommand(shooter, true, true));
-    var indexer = new ParallelDeadlineGroup(new IntakeAndLowShoot(intake, index, shooter));
-    var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(8.2,7.2)), new Rotation2d(0)));
+    var shooting = new ParallelDeadlineGroup(new IntakeAndLowShoot(intake, index, shooter));
+    var indexer = new ParallelDeadlineGroup(new UpperIndexCommand(index, true));
+  
+    //var Backup = new MoveToPosition(swerve, new Pose2d((new Translation2d(8.2,7.2)), new Rotation2d(0)));
     ///addCommands(move_to_position);
-    addCommands(setStart, indexer);  
+    addCommands(setStart, shooting, indexer);  
     
     //, move_to_ball_2, shoot, move_to_ball_3, shoot, move_to_ball_4, shoot);
   }

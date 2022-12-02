@@ -37,18 +37,23 @@
         // var move_to_ball_3 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.THIRD_BALL_X,C_FIELD_POSITIONS.THIRD_BALL_Y), new Rotation2d(0.0)));
         // var move_to_ball_4 = new MoveToPosition(swerve, new Pose2d(new Translation2d(C_FIELD_POSITIONS.FOURTH_BALL_X,C_FIELD_POSITIONS.FOURTH_BALL_Y), new Rotation2d(0.0)));
         // var shoot_1 = new ParallelDeadlineGroup(new WaitCommand(1.5), new IntakeAndShoot(intake, index, shooter)).with
-        var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0,0), new Rotation2d(2.35))));
+        ///var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0,0), new Rotation2d(2.35))));
+        var setStart = new InstantCommand(() -> swerve.resetPosition(new Pose2d(new Translation2d(0,0), new Rotation2d(1.57))));
         
+
         var stop1 = new InstantCommand(() -> swerve.stop());
         var stop2 = new InstantCommand(() -> swerve.stop());
         
         var intake1 = new IntakeCommand(intake, true);
         var indexer = new IntakeAndShoot(intake, index);
-        var shooting = new ShooterCommand(shooter, true, 2594.0, 3062.0);
+        var shooting = new ShooterCommand(shooter, true, 2894.0, 3362.0);
     
-        var move1 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-1.5,0)), new Rotation2d(2.35)));
-        var move2 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-.9,.6)), new Rotation2d(.78)));
+        ///var move1 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-1.5,0)), new Rotation2d(2.35)));
+        ///var move2 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-.9,.6)), new Rotation2d(.78)));
+        var move1 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-1.4,0)), new Rotation2d(1.57)));
+        var move2 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-1.4,0)), new Rotation2d(1.57)));
         
+
         addCommands(setStart, move1.raceWith(intake1.withTimeout(3)), stop1, new ParallelCommandGroup(move2.andThen(stop2), shooting.withTimeout(4), new WaitCommand(2).andThen(indexer.withTimeout(2))));
         
         //, new ParallelCommandGroup(move2.andThen(stop2), shooting.withTimeout(4), new WaitCommand(2).andThen(indexer.withTimeout(2))));

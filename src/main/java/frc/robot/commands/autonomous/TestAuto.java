@@ -47,7 +47,7 @@ public class TestAuto extends SequentialCommandGroup {
     
     var intake1 = new IntakeCommand(intake, true);
     var indexer = new IntakeAndShoot(intake, index);
-    var shooting = new ShooterCommand(shooter, true, 2594.0, 3062.0);
+    var shooting = new ShooterCommand(shooter, true, 2894.0, 3362.0);
 
     var move1 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-0.8,-1.3)), new Rotation2d(-1.57)));
     var move2 = new MoveToPosition(swerve, new Pose2d((new Translation2d(-0.1,-1.2)), new Rotation2d(-3.1)));
